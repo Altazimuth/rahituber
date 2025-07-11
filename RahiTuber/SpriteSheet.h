@@ -16,22 +16,22 @@ public:
 	void Tick();
 
 
-	void LoadFromTexture(TextureManager* texMan, const std::string& texPath, int frameCount, int gridX, int gridY, float fps, const sf::Vector2f& frameSize = { -1, -1 }, std::string* errorMsg = nullptr);
-	void SetAttributes(int frameCount, int gridX, int gridY, float fps, const sf::Vector2f& frameSize = { -1, -1 });
+	void LoadFromTexture(TextureManager* texMan, const std::string& texPath, int frameCount, int gridX, int gridY, float fps, const Vector2f& frameSize = { -1, -1 }, std::string* errorMsg = nullptr);
+	void SetAttributes(int frameCount, int gridX, int gridY, float fps, const Vector2f& frameSize = { -1, -1 });
 
 	void UnloadTexture();
 	void ReloadTexture();
 	bool HasTexture();
 
-	inline void setPosition(const sf::Vector2f& pos) { _sprite.setPosition(pos); }
-	inline void setOrigin(const sf::Vector2f& origin) { _sprite.setOrigin(origin); }
+	inline void setPosition(const Vector2f& pos) { _sprite.setPosition(pos); }
+	inline void setOrigin(const Vector2f& origin) { _sprite.setOrigin(origin); }
 	inline void setRotation(const float& rot) { _sprite.setRotation(rot); }
-	inline void setScale(const sf::Vector2f& scale) { _sprite.setScale(scale); }
+	inline void setScale(const Vector2f& scale) { _sprite.setScale(scale); }
 
-	inline sf::Vector2f getPosition() const { return _sprite.getPosition(); }
-	inline sf::Vector2f getOrigin() const { return _sprite.getOrigin(); }
+	inline Vector2f getPosition() const { return _sprite.getPosition(); }
+	inline Vector2f getOrigin() const { return _sprite.getOrigin(); }
 	inline float getRotation() const { return _sprite.getRotation(); }
-	inline sf::Vector2f getScale() const { return _sprite.getScale(); }
+	inline Vector2f getScale() const { return _sprite.getScale(); }
 
 	inline sf::Texture* getTexture() { return _tex; }
 
@@ -40,8 +40,8 @@ public:
 	inline void SetColor(float* col) { _sprite.setColor({ sf::Uint8(255*col[0]), sf::Uint8(255*col[1]),sf::Uint8(255*col[2]),sf::Uint8(255*col[3]) }); }
 	inline void SetColor(const sf::Color col) { _sprite.setColor(col); }
 
-	inline sf::Vector2f Size() const { return _spriteSize; }
-	inline sf::Vector2i GridSize() const { return _gridSize; }
+	inline Vector2f Size() const { return _spriteSize; }
+	inline Vector2i GridSize() const { return _gridSize; }
 	inline int FrameCount() const { return _frameRects.size(); }
 	inline float FPS() const { return _fps; }
 
@@ -135,8 +135,8 @@ private:
 
 	sf::Sprite _sprite;
 
-	sf::Vector2f _spriteSize = { 0,0 };
-	sf::Vector2i _gridSize = { 1,1 };
+	Vector2f _spriteSize = { 0,0 };
+	Vector2i _gridSize = { 1,1 };
 
 	int _maxFrame = 0;
 	int _currentFrame = 0;

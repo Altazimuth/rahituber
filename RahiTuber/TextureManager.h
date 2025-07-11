@@ -84,7 +84,7 @@ private:
 
 	std::mutex _loadMutex;
 
-	sf::Vector2i GetDimensions(const char* path) 
+	Vector2i GetDimensions(const char* path) 
 	{
 		std::ifstream in(path);
 		unsigned int width, height;
@@ -96,6 +96,6 @@ private:
 		width = _ntohl(width);
 		height = _ntohl(height);
 
-		return sf::Vector2i(width, height);
+		return Vector2i(width, height);
 	}
 };

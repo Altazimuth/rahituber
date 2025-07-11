@@ -451,7 +451,7 @@ public:
 	{
 		bool helpPressed = ImGui::Button("Help", { -1, ImGui::GetFrameHeight() });
 
-		sf::Vector2f dotpos = toSFVector(ImGui::GetItemRectMax());
+		sf::Vector2f dotpos = toRTVector(ImGui::GetItemRectMax());
 		dotpos -= sf::Vector2f(ImGui::GetFrameHeight()*0.52, ImGui::GetFrameHeight());
 		uiConfig->_helpBtnPosition = dotpos;
 
@@ -747,7 +747,7 @@ public:
 				{
 					if (ImGui::ColorPicker3("##bgColor", &imCol.x, ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_DisplayHex | ImGuiColorEditFlags_DisplayRGB))
 					{
-						appConfig->_bgColor = toSFColor(imCol);
+						appConfig->_bgColor = toSDLColor(imCol);
 					}
 					ImGui::EndPopup();
 				}
@@ -1205,7 +1205,7 @@ public:
 		ImVec4 col_light3(powf(baseColor2.x, .3f), powf(baseColor2.y, .3f), powf(baseColor2.z, .3f), 1.f);
 		ImVec4 greyoutCol(col_light3 * ImVec4(1.0, 1.0, 1.0, 0.6));
 
-		backdropCol = toSFColor(col_med);
+		backdropCol = toSDLColor(col_med);
 
 		auto oldFont = uiConfig->_fontName;
 		if (uiConfig->_theme.find("Contrast") != std::string::npos)
@@ -1214,7 +1214,7 @@ public:
 			col_dark = col_med = baseColor;
 			col_dark1 = col_med2 = ImVec4(baseColor.x * 0.5, baseColor.y * 0.5, baseColor.z * 0.5, 1.f);
 
-			backdropCol = toSFColor(col_dark2);
+			backdropCol = toSDLColor(col_dark2);
 
 			col_light3 = ImVec4(1, 1, 0.8, 1);
 			col_border = ImVec4(powf(baseColor.x, .8f), powf(baseColor.y, .8f), powf(baseColor.z, .8f), 1.f);
@@ -1299,7 +1299,7 @@ public:
 
 		if (appConfig->_menuWindow.isOpen())
 		{
-			appConfig->_menuWindow.clear(toSFColor(style.Colors[ImGuiCol_FrameBg]));
+			appConfig->_menuWindow.clear(toSDLColor(style.Colors[ImGuiCol_FrameBg]));
 		}
 
 		// Main menu window
@@ -1435,7 +1435,7 @@ public:
 
 			ImGui::Begin("move_tab", 0, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar);
 			ImGui::SetCursorPos({ uiConfig->_moveTabSize.x / 2 - 12 * appConfig->mainWindowScaling,4 * appConfig->mainWindowScaling });
-			ImGui::Image(uiConfig->_moveIconSprite, sf::Vector2f(24 * appConfig->mainWindowScaling, 24 * appConfig->mainWindowScaling), toSFColor(style.Colors[ImGuiCol_Text]));
+			ImGui::Image(uiConfig->_moveIconSprite, sf::Vector2f(24 * appConfig->mainWindowScaling, 24 * appConfig->mainWindowScaling), toSDLColor(style.Colors[ImGuiCol_Text]));
 			ImGui::End();
 		}
 
@@ -1446,9 +1446,9 @@ public:
 		{
 			sf::Color pulseColor(255u, 255u, 255u, 128u + 127u * pulse);
 			sf::CircleShape dotShape(ImGui::GetFrameHeight()*0.26, 10);
-			dotShape.setFillColor(toSFColor(style.Colors[ImGuiCol_ButtonActive]) * pulseColor);
+			dotShape.setFillColor(toSDLColor(style.Colors[ImGuiCol_ButtonActive]) * pulseColor);
 			dotShape.setOutlineThickness(0.5);
-			dotShape.setOutlineColor(toSFColor(style.Colors[ImGuiCol_ButtonHovered]) * pulseColor);
+			dotShape.setOutlineColor(toSDLColor(style.Colors[ImGuiCol_ButtonHovered]) * pulseColor);
 
 			if (appConfig->_menuPopped)
 			{

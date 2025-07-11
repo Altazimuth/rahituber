@@ -87,7 +87,7 @@ struct AppConfig
 	bool _menuPopped = false;
 	bool _menuPopPending = false;
 
-	sf::Vector2i _lastMenuPopPosition = { 0, 0 };
+	Vector2i _lastMenuPopPosition = { 0, 0 };
 
 	float _fps = 0;
 	int _fpsLimit = 60;
@@ -212,9 +212,9 @@ struct UIConfig
 	sf::Image _ico;
 	sf::Texture _moveIcon;
 	sf::Sprite _moveIconSprite;
-	sf::Vector2f _moveTabSize = { 80,32 };
+	Vector2f _moveTabSize = { 80,32 };
 
-	sf::Vector2f _helpBtnPosition = { 0,0 };
+	Vector2f _helpBtnPosition = { 0,0 };
 
 	sf::Font _font;
 	bool _showMenuOnStart = true;
@@ -236,7 +236,7 @@ struct UIConfig
 	sf::RectangleShape _resizeBox;
 	std::pair<bool, bool> _cornerGrabbed = { false, false };
 	bool _moveGrabbed = false;
-	sf::Vector2i _lastMiddleClickPosition = { -1, -1 };
+	Vector2i _lastMiddleClickPosition = { -1, -1 };
 	bool _middleClickGrabbed = false;
 
 	std::string _settingsFile;

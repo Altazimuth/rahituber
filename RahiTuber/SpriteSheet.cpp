@@ -62,9 +62,9 @@ void SpriteSheet::Tick()
 	}
 }
 
-void SpriteSheet::LoadFromTexture(TextureManager* texMan, const std::string& texPath, int frameCount, int gridX, int gridY, float fps, const sf::Vector2f& size, std::string* errorMsg)
+void SpriteSheet::LoadFromTexture(TextureManager* texMan, const std::string& texPath, int frameCount, int gridX, int gridY, float fps, const Vector2f& size, std::string* errorMsg)
 {
-	bool autoSize = size == sf::Vector2f(-1, -1);
+	bool autoSize = size == Vector2f(-1, -1);
 
 	if (texMan == nullptr)
 		return;
@@ -88,7 +88,7 @@ void SpriteSheet::LoadFromTexture(TextureManager* texMan, const std::string& tex
 	_spriteLoadFinished = true;
 }
 
-void SpriteSheet::SetAttributes(int frameCount, int gridX, int gridY, float fps, const sf::Vector2f& size)
+void SpriteSheet::SetAttributes(int frameCount, int gridX, int gridY, float fps, const Vector2f& size)
 {
 	_fps = fps;
 
@@ -97,15 +97,15 @@ void SpriteSheet::SetAttributes(int frameCount, int gridX, int gridY, float fps,
 	frameCount = std::max(1, frameCount);
 
 	_gridSize = { gridX, gridY };
-	sf::Vector2f frameSize(size);
+	Vector2f frameSize(size);
 
-	if (frameSize == sf::Vector2f(-1, -1))
+	if (frameSize == Vector2f(-1, -1))
 	{
 		if (_sprite.getTexture() == nullptr)
 			return;
 
-		sf::Vector2u texSize = _sprite.getTexture()->getSize();
-		frameSize = sf::Vector2f((float)texSize.x / gridX, (float)texSize.y / gridY);
+		Vector2u texSize = _sprite.getTexture()->getSize();
+		frameSize = Vector2f((float)texSize.x / gridX, (float)texSize.y / gridY);
 	}
 
 	_frameRects.clear();

@@ -160,7 +160,7 @@ bool TextureManager::LoadTexture(const std::string& path, void* caller, std::str
 				if (fs::exists(path, ec))
 				{
 					*errString += "Load error" + err;
-					sf::Vector2i imgDim = GetDimensions(path.c_str());
+					Vector2i imgDim = GetDimensions(path.c_str());
 					int maxDim = sf::Texture::getMaximumSize();
 					if (imgDim.x > maxDim || imgDim.y > maxDim)
 					{

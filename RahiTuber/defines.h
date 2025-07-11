@@ -1,9 +1,6 @@
 #pragma once
 
-#include "SFML/System.hpp"
-#include "SFML/Window/Keyboard.hpp"
-#include "SFML/Window/Joystick.hpp"
-#include "SFML/Graphics/Color.hpp"
+#include <SDL3/SDL.h>
 #include "imgui.h"
 #include <string>
 #include <iostream>
@@ -14,7 +11,10 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
+#include <math.h>
 #define PI 3.14159265359
+
+#include "rtmath.h"
 
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
@@ -360,140 +360,6 @@ static bool runProcess(const std::string& cmd, bool wait = false) {
 #endif
 }
 
-////////////////////////////////////////////////////////////
-/// \relates Vector2
-/// \brief Overload of binary operator *
-///
-/// \param left  Left operand (a vector)
-/// \param right Right operand (a vector)
-///
-/// \return Hadamard product of the two vectors
-///
-////////////////////////////////////////////////////////////
-template <typename T>
-inline sf::Vector2<T> operator *(const sf::Vector2<T>& left, const sf::Vector2<T>& right)
-{
-	return sf::Vector2<T>(left.x * right.x, left.y * right.y);
-}
-
-////////////////////////////////////////////////////////////
-/// \relates Vector2
-/// \brief Overload of binary operator *
-///
-/// \param left  Left operand (a vector)
-/// \param right Right operand (a vector)
-///
-/// \return Hadamard division of the two vectors
-///
-////////////////////////////////////////////////////////////
-template <typename T>
-inline sf::Vector2<T> operator /(const sf::Vector2<T>& left, const sf::Vector2<T>& right)
-{
-	return sf::Vector2<T>(left.x / right.x, left.y / right.y);
-}
-
-inline sf::Vector2<double> operator *(const sf::Vector2<double>& left, const double& right)
-{
-	return sf::Vector2<double>(left.x * right, left.y * right);
-}
-
-
-inline bool operator ==(const ImVec4& left, const ImVec4& right)
-{
-	return left.x == right.x && left.y == right.y && left.z == right.z && left.w == right.w;
-}
-
-inline bool operator !=(const ImVec4& left, const ImVec4& right)
-{
-	return !(left == right);
-}
-
-
-inline float Clamp(float in, float min = 0.0, float max = 1.0)
-{
-	if (in < min)
-		return min;
-
-	if (in > max)
-		return max;
-
-	return in;
-}
-
-template <typename T>
-inline sf::Vector2<T> Clamp(sf::Vector2<T> in, T min, T max)
-{
-	if (in.x < min)
-		in.x = min;
-
-	if (in.x > max)
-		in.x = max;
-
-	if (in.y < min)
-		in.y = min;
-
-	if (in.y > max)
-		in.y = max;
-
-	return in;
-}
-
-template <typename T>
-inline sf::Vector2<T> Clamp(sf::Vector2<T> in, sf::Vector2<T> min, sf::Vector2<T> max)
-{
-	if (in.x < min.x)
-		in.x = min.x;
-
-	if (in.x > max.x)
-		in.x = max.x;
-
-	if (in.y < min.y)
-		in.y = min.y;
-
-	if (in.y > max.y)
-		in.y = max.y;
-
-	return in;
-}
-
-template<typename T>
-inline sf::Vector2<T> Max(const sf::Vector2<T>& a, const sf::Vector2<T>& b)
-{
-	return { Max(a.x, b.x), Max(a.y, b.y) };
-}
-
-inline float Abs(float in)
-{
-	if (in < 0)
-		return in * -1.f;
-
-	return in;
-}
-
-template<typename T>
-inline sf::Vector2<T> Abs(sf::Vector2<T> in)
-{
-	return { in.x > 0 ? in.x : -in.x, in.y > 0 ? in.y : -in.y };
-}
-
-template<typename T>
-inline float Max(T a, T b)
-{
-	if (a > b)
-		return a;
-
-	return b;
-}
-
-template<typename T>
-inline float Min(T a, T b)
-{
-	if (a < b)
-		return a;
-
-	return b;
-}
-
 static inline bool ToolTip(const char* title, const char* txt, sf::Clock* hoverTimer, bool forSlider = false)
 {
 
@@ -589,34 +455,34 @@ static inline void TextCentered(const std::string& text)
 	ImGui::Text(text.c_str());
 }
 
-inline sf::Color toSFColor(const ImVec4& col)
+inline SDL_Color toSDLColor(const ImVec4& col)
 {
-	return sf::Color(sf::Uint8(Clamp(col.x * 255u, 0, 255u)), 
-		sf::Uint8(Clamp(col.y * 255u, 0, 255u)), 
-		sf::Uint8(Clamp(col.z * 255u, 0, 255u)), 
-		sf::Uint8(Clamp(col.w * 255u, 0, 255u)));
+	return SDL_Color{Uint8(Clamp(col.x * 255u, 0, 255u)), 
+		Uint8(Clamp(col.y * 255u, 0, 255u)), 
+		Uint8(Clamp(col.z * 255u, 0, 255u)), 
+		Uint8(Clamp(col.w * 255u, 0, 255u))};
 }
 
-inline sf::Color toSFColor(const float* col)
+inline SDL_Color toSDLColor(const float* col)
 {
 	if (col != nullptr)
 	{
 		if(sizeof(col) >= (sizeof(float) * 4))
 		{
-			return sf::Color(sf::Uint8(Clamp(col[0] * 255u, 0, 255u)),
-				sf::Uint8(Clamp(col[1] * 255u, 0, 255u)),
-				sf::Uint8(Clamp(col[2] * 255u, 0, 255u)),
-				sf::Uint8(Clamp(col[3] * 255u, 0, 255u)));
+			return SDL_Color{Uint8(Clamp(col[0] * 255u, 0, 255u)),
+				Uint8(Clamp(col[1] * 255u, 0, 255u)),
+				Uint8(Clamp(col[2] * 255u, 0, 255u)),
+				Uint8(Clamp(col[3] * 255u, 0, 255u))};
 		}
 		else if (sizeof(col) >= (sizeof(float) * 3))
 		{
-			return sf::Color(sf::Uint8(Clamp(col[0] * 255u, 0, 255u)),
-				sf::Uint8(Clamp(col[1] * 255u, 0, 255u)),
-				sf::Uint8(Clamp(col[2] * 255u, 0, 255u)),
-				sf::Uint8(255u));
+			return SDL_Color{Uint8(Clamp(col[0] * 255u, 0, 255u)),
+				Uint8(Clamp(col[1] * 255u, 0, 255u)),
+				Uint8(Clamp(col[2] * 255u, 0, 255u)),
+				Uint8(255u)};
 		}
 	}
-	return sf::Color::White;
+	return SDL_Color{255, 255, 255, 255};
 }
 
 inline ImVec4 toImVec4(const float* col)
@@ -627,7 +493,7 @@ inline ImVec4 toImVec4(const float* col)
 	}
 }
 
-inline ImVec4 toImVec4(const sf::Color& col)
+inline ImVec4 toImVec4(const SDL_Color& col)
 {
 	return ImVec4((float)col.r / 255, (float)col.g / 255, (float)col.b / 255, (float)col.a / 255);
 }
@@ -640,14 +506,14 @@ inline ImColor toImColor(const float* col)
 	}
 }
 
-inline ImColor toImColor(const sf::Color& col)
+inline ImColor toImColor(const SDL_Color& col)
 {
 	return ImColor((float)col.r / 255, (float)col.g / 255, (float)col.b / 255, (float)col.a / 255);
 }
 
-inline sf::Vector2f toSFVector(const ImVec2& vec)
+inline Vector2f toRTVector(const ImVec2& vec)
 {
-	return sf::Vector2f(vec.x, vec.y);
+	return Vector2f(vec.x, vec.y);
 }
 
 ////////////////////////////////////////////////////////////
@@ -915,22 +781,22 @@ inline std::string UTF8ToANSI(const std::string& input)
 #endif
 }
 
-inline float Length(const sf::Vector2f& v)
+inline float Length(const Vector2f& v)
 {
     return sqrt(pow(v.x, 2.f) + pow(v.y, 2.f));
 }
 
-inline double Length(const sf::Vector2<double>& v)
+inline double Length(const Vector2<double>& v)
 {
 	return sqrt(pow(v.x, 2.0) + pow(v.y, 2.0));
 }
 
-inline float Dot(const sf::Vector2f& a, const sf::Vector2f& b)
+inline float Dot(const Vector2f& a, const Vector2f& b)
 {
 	return a.x * b.y + b.x * a.y;
 }
 
-inline double Dot(const sf::Vector2<double>& a, const sf::Vector2<double>& b)
+inline double Dot(const Vector2<double>& a, const Vector2<double>& b)
 {
 	return a.x * b.y + b.x * a.y;
 }
@@ -944,9 +810,9 @@ inline double Rad2Deg(const double& a)
 	return (a / PI) * 180.0;
 }
 
-inline sf::Vector2<double> Rotate(const sf::Vector2<double>& point, double angle, sf::Vector2f pivot = { 0.f, 0.f })
+inline Vector2<double> Rotate(const Vector2<double>& point, double angle, Vector2f pivot = { 0.f, 0.f })
 {
-	sf::Vector2<double> p(point);
+	Vector2<double> p(point);
 
 	double s = sin(angle);
 	double c = cos(angle);
@@ -965,13 +831,13 @@ inline sf::Vector2<double> Rotate(const sf::Vector2<double>& point, double angle
 	return p;
 }
 
-inline sf::Vector2f Rotate(const sf::Vector2f& point, double angle, sf::Vector2f pivot = { 0.f, 0.f })
+inline Vector2f Rotate(const Vector2f& point, double angle, Vector2f pivot = { 0.f, 0.f })
 {
-	sf::Vector2<double> res = Rotate(sf::Vector2<double>(point.x, point.y), angle, pivot);
+	Vector2<double> res = Rotate(Vector2<double>(point.x, point.y), angle, pivot);
 	return { (float)res.x, (float)res.y };
 }
 
-inline float EllipseRadius(float angle, const sf::Vector2f& axes)
+inline float EllipseRadius(float angle, const Vector2f& axes)
 {
 	// calculate radius of ellipse from x and y radius components
 	float radius = (axes.x * axes.y) /
@@ -979,6 +845,8 @@ inline float EllipseRadius(float angle, const sf::Vector2f& axes)
 
 	return radius;
 }
+
+#if 0
 
 static std::map<wchar_t, sf::Keyboard::Scan::Scancode> g_specialkey_codes = {
 
@@ -1269,3 +1137,5 @@ static std::map<sf::Keyboard::Scan::Scancode, std::string> g_scancode_names = {
 	{sf::Keyboard::Scan::F23, "F23"},
 	{sf::Keyboard::Scan::F24, "F24"},
 };
+
+#endif

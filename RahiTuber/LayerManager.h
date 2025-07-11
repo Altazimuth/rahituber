@@ -1,11 +1,8 @@
 #pragma once
 
-#include "SFML/Graphics.hpp"
-#include "SFML/Main.hpp"
-#include "SFML/System.hpp"
+#include <SDL3/SDL.h>
 
 #include "imgui.h"
-#include "imgui-SFML.h"
 
 #include "SpriteSheet.h"
 
@@ -119,9 +116,9 @@ public:
 
 		BounceType _lastEnabledBounceType = BounceLoudness;
 		BounceType _bounceType = BounceNone;
-		sf::Vector2f _bounceMove = { 0.f, 80.f };
+		Vector2f _bounceMove = { 0.f, 80.f };
 		float _bounceRotation = 0.0;
-		sf::Vector2f _bounceScale = { 0.0, 0.0 };
+		Vector2f _bounceScale = { 0.0, 0.0 };
 		bool _bounceScaleConstrain = true;
 		float _bounceFrequency = 0.333;
 		bool _isBouncing = false;
@@ -130,9 +127,9 @@ public:
 		bool _idleMotionEnabled = false;
 		float _breathFrequency = 4.0;
 		bool _isBreathing = false;
-		sf::Vector2f _breathAmount = { 0.0f, 0.0f };
-		sf::Vector2f _breathScale = { 0.1, 0.1 };
-		sf::Vector2f _breathMove = { 0.0, 30.0 };
+		Vector2f _breathAmount = { 0.0f, 0.0f };
+		Vector2f _breathScale = { 0.1, 0.1 };
+		Vector2f _breathMove = { 0.0, 30.0 };
 		float _breathRotation = 0.0;
 		ImVec4 _breathTint = { 1,1,1,1 };
 		bool _doBreathTint = false;
@@ -175,12 +172,12 @@ public:
 
 		SpriteSheet* _activeSprite = nullptr;
 
-		sf::Vector2f _scale = { 1.f, 1.f };
-		sf::Vector2f _pos;
+		Vector2f _scale = { 1.f, 1.f };
+		Vector2f _pos;
 		double _rot = 0.0;
 		bool _keepAspect = true;
 
-		sf::Vector2<double> _pivot = { 0.5, 0.5 };
+		Vector2<double> _pivot = { 0.5, 0.5 };
 		bool _pivotPx = false;
 
 		sf::BlendMode _blendMode = g_blendmodes["Normal"];
@@ -237,17 +234,17 @@ public:
 
 		bool EvaluateLayerVisibility();
 
-		void DoIndividualMotion(bool talking, bool screaming, float talkAmount, double& rot, sf::Vector2<double>& motionScale, ImVec4& activeSpriteCol, sf::Vector2<double>& motionPos);
+		void DoIndividualMotion(bool talking, bool screaming, float talkAmount, double& rot, Vector2<double>& motionScale, ImVec4& activeSpriteCol, Vector2<double>& motionPos);
 
-		void CalculateInheritedMotion(sf::Vector2<double>& motionScale, sf::Vector2<double>& motionPos, double& motionRot, double& motionParentRot, ImVec4& motionTint, sf::Vector2<double>& physicsPos, bool becameVisible, SpriteSheet* lastActiveSprite, float timeMult);
+		void CalculateInheritedMotion(Vector2<double>& motionScale, Vector2<double>& motionPos, double& motionRot, double& motionParentRot, ImVec4& motionTint, Vector2<double>& physicsPos, bool becameVisible, SpriteSheet* lastActiveSprite, float timeMult);
 
-		void DoConstantMotion(sf::Time& frameTime, sf::Vector2<double>& mpScale, sf::Vector2<double>& mpPos, double& mpRot);
+		void DoConstantMotion(sf::Time& frameTime, Vector2<double>& mpScale, Vector2<double>& mpPos, double& mpRot);
 
 		void CalculateDraw(float windowHeight, float windowWidth, float talkLevel, float talkMax);
 
 		void DetermineVisibleSprites(bool talking, bool screaming, ImVec4& activeSpriteCol, float& talkAmount);
 
-		void AddTrackingMovement(sf::Vector2<double>& mpPos, double& mpRot);
+		void AddTrackingMovement(Vector2<double>& mpPos, double& mpRot);
 
 		bool DrawGUI(ImGuiStyle& style, int layerID);
 
@@ -274,13 +271,13 @@ public:
 		struct MotionLinkData
 		{
 			sf::Time _frameTime;
-			sf::Vector2<double>  _scale = { 1.f, 1.f };
-			sf::Vector2<double>  _pos = { 0,0 };
-			sf::Vector2<double>  _physicsPos = { 0,0 };
+			Vector2<double>  _scale = { 1.f, 1.f };
+			Vector2<double>  _pos = { 0,0 };
+			Vector2<double>  _physicsPos = { 0,0 };
 			ImVec4 _tint;
 			double _rot = 0.0;
 			double _parentRot = 0.0;
-			sf::Vector2<double>  _parentPos = { 0,0 };
+			Vector2<double>  _parentPos = { 0,0 };
 		};
 		bool _hideWithParent = true;
 		bool _inheritTint = false;
@@ -288,14 +285,14 @@ public:
 		float _motionSpring = 0.f;
 		float _distanceLimit = -1.f;
 		float _rotationEffect = 0.f;
-		sf::Vector2<double> _lastAccel = { 0.f, 0.f };
+		Vector2<double> _lastAccel = { 0.f, 0.f };
 		bool _allowIndividualMotion = false;
 		bool _physicsIgnorePivots = false;
 		MotionStretchType _motionStretch = MS_None;
-		sf::Vector2f _motionStretchStrength = { 1.0f, 1.0f };
-		sf::Vector2f _stretchScaleMin = { 0.5f, 0.5f };
-		sf::Vector2f _stretchScaleMax = { 2.0f, 2.0f };
-		sf::Vector2f _weightDirection = { 0.f, 1.f };
+		Vector2f _motionStretchStrength = { 1.0f, 1.0f };
+		Vector2f _stretchScaleMin = { 0.5f, 0.5f };
+		Vector2f _stretchScaleMax = { 2.0f, 2.0f };
+		Vector2f _weightDirection = { 0.f, 1.f };
 
 		std::deque<MotionLinkData> _motionLinkData;
 
@@ -307,15 +304,15 @@ public:
 		sf::Clock _frameTimer;
 		sf::Clock _physicsTimer;
 
-		sf::Vector2f _lastHeaderScreenPos;
-		sf::Vector2f _lastHeaderPos;
-		sf::Vector2f _lastHeaderSize;
+		Vector2f _lastHeaderScreenPos;
+		Vector2f _lastHeaderPos;
+		Vector2f _lastHeaderSize;
 
-		sf::Vector2f _constantScale = { 1.f, 1.f };
-		sf::Vector2f _constantPos = { 0,0 };
+		Vector2f _constantScale = { 1.f, 1.f };
+		Vector2f _constantPos = { 0,0 };
 		double _constantRot = 0;
-		sf::Vector2f _storedConstantScale = { 1.f, 1.f };
-		sf::Vector2f _storedConstantPos = { 0,0 };
+		Vector2f _storedConstantScale = { 1.f, 1.f };
+		Vector2f _storedConstantPos = { 0,0 };
 		float _storedConstantRot = 0;
 
 		bool _passRotationToChildLayers = false;
@@ -348,20 +345,20 @@ public:
 		bool _followElliptical = false;
 		bool _trackingOffWhenHidden = true;
 
-		sf::Vector2f _mouseAreaSize = { -1.f, -1.f };
-		sf::Vector2f _mouseNeutralPos = { -1.f, -1.f };
+		Vector2f _mouseAreaSize = { -1.f, -1.f };
+		Vector2f _mouseNeutralPos = { -1.f, -1.f };
 		float _mouseEffect = 1.0;
 
 		TrackingAxis _trackingAxis;
 		float _axisDeadzone = { 0.f };
 
-		sf::Vector2f _trackingAmount = { 0.f, 0.f };
+		Vector2f _trackingAmount = { 0.f, 0.f };
 		float _trackingSmooth = 0.2;
-		sf::Vector2f _trackingMoveLimits = { 50.f, 50.f };
+		Vector2f _trackingMoveLimits = { 50.f, 50.f };
 		int _trackingJoystick = -1;
 		float _joypadEffect = 1.0;
 
-		sf::Vector2f _trackingRotation = { 0.0,0.0 };
+		Vector2f _trackingRotation = { 0.0,0.0 };
 
 		ImVec4 _layerColor = { 0,0,0,0 };
 
@@ -650,8 +647,8 @@ private:
 	struct GlobalPreset
 	{
 		std::string _name = "New Preset";
-		sf::Vector2f _scale = { 1.f, 1.f };
-		sf::Vector2f _pos = { 0.f,0.f };
+		Vector2f _scale = { 1.f, 1.f };
+		Vector2f _pos = { 0.f,0.f };
 		float _rot = 0.0;
 	};
 
@@ -660,8 +657,8 @@ private:
 	bool _canvasPresetMenuOpen = false;
 	bool _canvasPresetMenuFirstOpen = true;
 
-	sf::Vector2f _globalScale = { 1.f, 1.f };
-	sf::Vector2f _globalPos = { 0.f,0.f };
+	Vector2f _globalScale = { 1.f, 1.f };
+	Vector2f _globalPos = { 0.f,0.f };
 	float _globalRot = 0.0;
 	bool _globalKeepAspect = true;
 
@@ -684,7 +681,7 @@ private:
 	bool _outOfFocus = false;
 	bool _lastDragMouseDown = false;
 	int _draggedLayer = -1;
-	sf::Vector2f _layerDragPos = { 0,0 };
+	Vector2f _layerDragPos = { 0,0 };
 	sf::Clock _layerDragTimer;
 	bool _dragActive = false;
 
@@ -767,7 +764,7 @@ private:
 		int fcount = anim.FrameCount();
 		auto animElement = parent->FirstChildElement(animName);
 
-		bool hasAnim = fcount > 1 || anim.GridSize() != sf::Vector2i(1, 1) || animsSynced == true;
+		bool hasAnim = fcount > 1 || anim.GridSize() != Vector2i(1, 1) || animsSynced == true;
 
 		if (animElement && !hasAnim)
 		{
@@ -856,7 +853,7 @@ inline void AddResetButton(const char* id, T& value, T resetValue, AppConfig* ap
 	sf::Color btnColor = { sf::Uint8(255 * col.x), sf::Uint8(255 * col.y), sf::Uint8(255 * col.z) };
 
 	ImGui::PushID(id);
-	if (ImGui::ImageButton(id, *_resetIcon, sf::Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor))
+	if (ImGui::ImageButton(id, *_resetIcon, Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor))
 		if (enabled)
 			value = resetValue;
 	ImGui::PopID();

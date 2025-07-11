@@ -288,7 +288,7 @@ void LayerManager::Draw(sf::RenderTarget* target, float windowHeight, float wind
 				clipLayer->_talkBlinkSprite->Draw(&clipRTs._clipRT, clipState);
 				clipLayer->_screamSprite->Draw(&clipRTs._clipRT, clipState);
 
-				layer._clipRect.setSize(sf::Vector2f(target->getSize().x, target->getSize().y));
+				layer._clipRect.setSize(Vector2f(target->getSize().x, target->getSize().y));
 				layer._clipRect.setPosition({ 0,0 });
 
 				// Do not premultiply alpha here
@@ -373,22 +373,22 @@ void LayerManager::Draw(sf::RenderTarget* target, float windowHeight, float wind
 
 				const auto& theme = _uiConfig->_themes[_uiConfig->_theme];
 
-				sf::Vector2f origin = layer._activeSprite->getOrigin();
-				sf::Vector2f pos = layer._activeSprite->getPosition();
-				sf::Vector2f scale = layer._activeSprite->getScale();
-				sf::Vector2f size = layer._activeSprite->Size();
+				Vector2f origin = layer._activeSprite->getOrigin();
+				Vector2f pos = layer._activeSprite->getPosition();
+				Vector2f scale = layer._activeSprite->getScale();
+				Vector2f size = layer._activeSprite->Size();
 				float rot = layer._activeSprite->getRotation();
 
-				sf::Vector2f boxSize = { size.x * scale.x, size.y * scale.y };
-				sf::Vector2f boxOrigin = { origin.x * scale.x, origin.y * scale.y };
+				Vector2f boxSize = { size.x * scale.x, size.y * scale.y };
+				Vector2f boxOrigin = { origin.x * scale.x, origin.y * scale.y };
 
-				sf::Color brightColor = toSFColor(theme.second + ImVec4(0.2, 0.2, 0.2, 0.2));
+				sf::Color brightColor = toSDLColor(theme.second + ImVec4(0.2, 0.2, 0.2, 0.2));
 
 				auto box = sf::RectangleShape(boxSize);
 				box.setOrigin(boxOrigin);
 				box.setPosition(pos);
 				box.setRotation(rot);
-				box.setOutlineColor(toSFColor(theme.first + ImVec4(0.2, 0.2, 0.2, 0.2)));
+				box.setOutlineColor(toSDLColor(theme.first + ImVec4(0.2, 0.2, 0.2, 0.2)));
 				box.setOutlineThickness((1.0f / _globalScale.x) * _appConfig->mainWindowScaling);
 				sf::Color fill = brightColor;
 				if (layerHovered && _uiConfig->_hilightHovered)
@@ -404,7 +404,7 @@ void LayerManager::Draw(sf::RenderTarget* target, float windowHeight, float wind
 				circle.setPosition(pos);
 				circle.setOrigin({ circleRadius ,circleRadius });
 				circle.setFillColor(brightColor);
-				circle.setOutlineColor(toSFColor(theme.first));
+				circle.setOutlineColor(toSDLColor(theme.first));
 				circle.setOutlineThickness(2 * _appConfig->mainWindowScaling);
 
 				circle.setScale({ 1.0f / _globalScale.x, 1.0f / _globalScale.y });
@@ -426,9 +426,9 @@ void LayerManager::Draw(sf::RenderTarget* target, float windowHeight, float wind
 				// Draw Crosshair for mouse tracking
 				if (layerHovered && layer._trackingType)
 				{
-					auto targetColor = toSFColor(theme.second * 1.1 + ImVec4(0.2, 0.2, 0.2, 0.2));
+					auto targetColor = toSDLColor(theme.second * 1.1 + ImVec4(0.2, 0.2, 0.2, 0.2));
 					auto circle2 = sf::CircleShape(targetSize, 16);
-					auto targetPos = layer._mouseNeutralPos - (sf::Vector2f)_appConfig->_window.getPosition();
+					auto targetPos = layer._mouseNeutralPos - (Vector2f)_appConfig->_window.getPosition();
 					circle2.setPosition(targetPos);
 					circle2.setOrigin({ targetSize ,targetSize });
 					circle2.setFillColor(sf::Color::Transparent);
@@ -791,26 +791,26 @@ void LayerManager::DrawButtonsLayerSetUI()
 	float uiScale = _appConfig->scalingFactor;
 	float btnSize = uiScale * 38;
 	float separatorY = btnSize / 2 - uiScale * 5;
-	sf::Color btnColor = toSFColor(ImGui::GetStyleColorVec4(ImGuiCol_Text));
+	sf::Color btnColor = toSDLColor(ImGui::GetStyleColorVec4(ImGuiCol_Text));
 	if (ImGui::BeginTable("##toolButtons", 11, ImGuiTableFlags_NoBordersInBody | ImGuiTableFlags_SizingStretchProp))
 	{
 		ImGui::TableNextColumn();
-		_newXMLOpen = ImGui::ImageButton("##newFile", *_newFileIcon, sf::Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor);
+		_newXMLOpen = ImGui::ImageButton("##newFile", *_newFileIcon, Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor);
 		ToolTip("New", "Start a new layer set.\n(discards unsaved changes!)", &_appConfig->_hoverTimer);
 		ImGui::TableNextColumn();
-		_loadXMLOpen = ImGui::ImageButton("##Open", *_openFileIcon, sf::Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor);
+		_loadXMLOpen = ImGui::ImageButton("##Open", *_openFileIcon, Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor);
 		ToolTip("Open", "Browse for a layer set (.xml) file.", &_appConfig->_hoverTimer);
 		ImGui::TableNextColumn();
-		_saveXMLOpen = ImGui::ImageButton("##save", *_saveIcon, sf::Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor);
+		_saveXMLOpen = ImGui::ImageButton("##save", *_saveIcon, Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor);
 		ToolTip("Save", "Save the current layer set.", &_appConfig->_hoverTimer);
 		ImGui::TableNextColumn();
-		_saveAsXMLOpen = ImGui::ImageButton("##saveAs", *_saveAsIcon, sf::Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor);
+		_saveAsXMLOpen = ImGui::ImageButton("##saveAs", *_saveAsIcon, Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor);
 		ToolTip("Save As", "Save the current layer set with a new name.", &_appConfig->_hoverTimer);
 		ImGui::TableNextColumn();
-		_makePortableOpen = ImGui::ImageButton("##makePortable", *_makePortableIcon, sf::Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor);
+		_makePortableOpen = ImGui::ImageButton("##makePortable", *_makePortableIcon, Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor);
 		ToolTip("Make Portable", "Save a version of this layer set with\nfile paths relative to RahiTuber", &_appConfig->_hoverTimer);
 		ImGui::TableNextColumn();
-		_reloadXMLOpen = ImGui::ImageButton("##reload", *_reloadIcon, sf::Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor);
+		_reloadXMLOpen = ImGui::ImageButton("##reload", *_reloadIcon, Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor);
 		ToolTip("Reload", "Reload the specified layer set.\n(discards unsaved changes!)", &_appConfig->_hoverTimer);
 
 		ImGui::TableNextColumn();
@@ -818,10 +818,10 @@ void LayerManager::DrawButtonsLayerSetUI()
 		ImGui::Text("|");
 
 		ImGui::TableNextColumn();
-		_newLayerOpen = ImGui::ImageButton("##newLayer", *_newLayerIcon, sf::Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor);
+		_newLayerOpen = ImGui::ImageButton("##newLayer", *_newLayerIcon, Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor);
 		ToolTip("Add Layer", "Add a new Layer to the top of the list.", &_appConfig->_hoverTimer);
 		ImGui::TableNextColumn();
-		_newFolderOpen = ImGui::ImageButton("##newFolder", *_newFolderIcon, sf::Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor);
+		_newFolderOpen = ImGui::ImageButton("##newFolder", *_newFolderIcon, Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor);
 		ToolTip("Add Folder", "Add a new Folder to the top of the list.", &_appConfig->_hoverTimer);
 
 		ImGui::TableNextColumn();
@@ -829,7 +829,7 @@ void LayerManager::DrawButtonsLayerSetUI()
 		ImGui::Text("|");
 
 		ImGui::TableNextColumn();
-		_editStatesOpen = ImGui::ImageButton("##states", *_statesIcon, sf::Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor);
+		_editStatesOpen = ImGui::ImageButton("##states", *_statesIcon, Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor);
 		ToolTip("States", "Configure the States for this Layer Set.", &_appConfig->_hoverTimer);
 
 		ImGui::EndTable();
@@ -880,7 +880,7 @@ void LayerManager::DrawGUI(ImGuiStyle& style, float maxHeight)
 			ImGui::Separator();
 			ImGui::PopStyleColor();
 
-			AddResetButton("pos", _globalPos, sf::Vector2f(0.0, 0.0), _appConfig, &style);
+			AddResetButton("pos", _globalPos, Vector2f(0.0, 0.0), _appConfig, &style);
 			float pos[2] = { _globalPos.x, _globalPos.y };
 			if (Float2SliderDrag("Position", pos, -1000.0, 1000.f, "%.0f", 0, _uiConfig->_numberEditType))
 			{
@@ -893,7 +893,7 @@ void LayerManager::DrawGUI(ImGuiStyle& style, float maxHeight)
 			FloatSliderDrag("Rotation", &_globalRot, -180.f, 180.f, "%.1f deg", 0, _uiConfig->_numberEditType);
 			ToolTip("Change the rotation for all layers", &_appConfig->_hoverTimer, true);
 
-			AddResetButton("scale", _globalScale, sf::Vector2f(1.0, 1.0), _appConfig, &style);
+			AddResetButton("scale", _globalScale, Vector2f(1.0, 1.0), _appConfig, &style);
 			float scale[2] = { _globalScale.x, _globalScale.y };
 			if (Float2SliderDrag("Scale", scale, 0.0, 5.f, "%.2f", 0, _uiConfig->_numberEditType))
 			{
@@ -962,18 +962,18 @@ void LayerManager::DrawGUI(ImGuiStyle& style, float maxHeight)
 
 					if ((layerBelowInsert._isFolder == false || skipFolder) && !folderIntoFolder)
 					{
-						sf::Vector2f linePos = layerBelowInsert._lastHeaderPos;
+						Vector2f linePos = layerBelowInsert._lastHeaderPos;
 
 						if (hoveredLayer > _draggedLayer)
 							linePos.y += layerBelowInsert._lastHeaderSize.y;
 						else
 							linePos.y -= 1;
 
-						sf::Vector2f linePos2 = linePos;
+						Vector2f linePos2 = linePos;
 						linePos2.x += layerBelowInsert._lastHeaderSize.x;
 
 						ImVec4 lineCol = ImGui::GetStyleColorVec4(ImGuiCol_Text);
-						ImGui::DrawLine(linePos, linePos2, toSFColor(lineCol), 2);
+						ImGui::DrawLine(linePos, linePos2, toSDLColor(lineCol), 2);
 					}
 				}
 
@@ -1008,13 +1008,13 @@ void LayerManager::DrawGUI(ImGuiStyle& style, float maxHeight)
 					if (!skipFolder && layerBelowInsert._isFolder == true && !_layers[_draggedLayer]._isFolder)
 					{
 						ImGui::SetCursorPos(resetPos);
-						sf::Vector2f linePos = layerBelowInsert._lastHeaderPos;
+						Vector2f linePos = layerBelowInsert._lastHeaderPos;
 						linePos.y -= 1;
 
 						ImVec4 lineCol = ImGui::GetStyleColorVec4(ImGuiCol_Text);
 						lineCol.w = 0.5;
 						sf::FloatRect hilightRect(linePos, layerBelowInsert._lastHeaderSize);
-						ImGui::DrawRectFilled(hilightRect, toSFColor(lineCol), 2);
+						ImGui::DrawRectFilled(hilightRect, toSDLColor(lineCol), 2);
 					}
 				}
 			}
@@ -1050,13 +1050,13 @@ void LayerManager::DrawCanvasPresetGUI()
 
 	if (ImGui::BeginTable("PresetsTable", 5, ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_NoPadInnerX))
 	{
-		sf::Color btnColor = toSFColor(ImGui::GetStyleColorVec4(ImGuiCol_Text));
+		sf::Color btnColor = toSDLColor(ImGui::GetStyleColorVec4(ImGuiCol_Text));
 		float btnSize = ImGui::GetFrameHeight() - 2;
 		ImGui::TableNextColumn();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, { 1, 1 });
 
-		if (ImGui::ImageButton("##NewPreset", *_plusIcon, sf::Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor))
+		if (ImGui::ImageButton("##NewPreset", *_plusIcon, Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor))
 		{
 			_globalPresets.push_back(GlobalPreset());
 			_currentGlobalPreset = _globalPresets.size() - 1;
@@ -1071,7 +1071,7 @@ void LayerManager::DrawCanvasPresetGUI()
 		ImGui::TableNextColumn();
 		//ImGui::SameLine(btnSize*0.6);
 
-		if (ImGui::ImageButton("##RenamePreset", *_editIcon, sf::Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor))
+		if (ImGui::ImageButton("##RenamePreset", *_editIcon, Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor))
 		{
 			if (_currentGlobalPreset != -1 && _currentGlobalPreset < _globalPresets.size())
 			{
@@ -1084,7 +1084,7 @@ void LayerManager::DrawCanvasPresetGUI()
 		ImGui::TableNextColumn();
 		//ImGui::SameLine(btnSize * 0.6);
 
-		if (ImGui::ImageButton("##SavePreset", *_saveIcon, sf::Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor))
+		if (ImGui::ImageButton("##SavePreset", *_saveIcon, Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor))
 		{
 			if (_currentGlobalPreset != -1 && _currentGlobalPreset < _globalPresets.size())
 			{
@@ -1100,7 +1100,7 @@ void LayerManager::DrawCanvasPresetGUI()
 		//ImGui::SameLine(btnSize * 0.6);
 
 		ImVec4 delCol = PushDeleteStyle();
-		if (ImGui::ImageButton("##DeletePreset", *_delIcon, sf::Vector2f(btnSize, btnSize), sf::Color::Transparent, toSFColor(delCol)))
+		if (ImGui::ImageButton("##DeletePreset", *_delIcon, Vector2f(btnSize, btnSize), sf::Color::Transparent, toSDLColor(delCol)))
 		{
 			if (_currentGlobalPreset != -1 && _currentGlobalPreset < _globalPresets.size())
 				_globalPresets.erase(_globalPresets.begin() + _currentGlobalPreset);
@@ -1979,19 +1979,19 @@ bool LayerManager::SaveLayers(const std::string& settingsFileName, bool makePort
 			thisLayer->SetAttribute("talkBlinkPath", layer._talkBlinkSpritePath.c_str());
 			thisLayer->SetAttribute("screamPath", layer._screamSpritePath.c_str());
 
-			if (layer._idleSprite->FrameCount() > 1 || layer._idleSprite->GridSize() != sf::Vector2i(1, 1) || layer._animsSynced == true)
+			if (layer._idleSprite->FrameCount() > 1 || layer._idleSprite->GridSize() != Vector2i(1, 1) || layer._animsSynced == true)
 				SaveAnimInfo(thisLayer, &doc, "idleAnim", *layer._idleSprite, layer._animsSynced);
 
-			if (layer._talkSprite->FrameCount() > 1 || layer._talkSprite->GridSize() != sf::Vector2i(1, 1) || layer._animsSynced == true)
+			if (layer._talkSprite->FrameCount() > 1 || layer._talkSprite->GridSize() != Vector2i(1, 1) || layer._animsSynced == true)
 				SaveAnimInfo(thisLayer, &doc, "talkAnim", *layer._talkSprite, layer._animsSynced);
 
-			if (layer._blinkSprite->FrameCount() > 1 || layer._blinkSprite->GridSize() != sf::Vector2i(1, 1) || layer._animsSynced == true)
+			if (layer._blinkSprite->FrameCount() > 1 || layer._blinkSprite->GridSize() != Vector2i(1, 1) || layer._animsSynced == true)
 				SaveAnimInfo(thisLayer, &doc, "blinkAnim", *layer._blinkSprite, layer._animsSynced);
 
-			if (layer._talkBlinkSprite->FrameCount() > 1 || layer._talkBlinkSprite->GridSize() != sf::Vector2i(1, 1) || layer._animsSynced == true)
+			if (layer._talkBlinkSprite->FrameCount() > 1 || layer._talkBlinkSprite->GridSize() != Vector2i(1, 1) || layer._animsSynced == true)
 				SaveAnimInfo(thisLayer, &doc, "talkBlinkAnim", *layer._talkBlinkSprite, layer._animsSynced);
 
-			if (layer._screamSprite->FrameCount() > 1 || layer._screamSprite->GridSize() != sf::Vector2i(1, 1) || layer._animsSynced == true)
+			if (layer._screamSprite->FrameCount() > 1 || layer._screamSprite->GridSize() != Vector2i(1, 1) || layer._animsSynced == true)
 				SaveAnimInfo(thisLayer, &doc, "screamAnim", *layer._screamSprite, layer._animsSynced);
 
 			thisLayer->SetAttribute("syncAnims", layer._animsSynced);
@@ -3555,7 +3555,7 @@ void LayerManager::DrawStatesGUI()
 								ImVec4 col = ImGui::GetStyleColorVec4(ImGuiCol_BorderShadow);
 
 								//if (++layerIdx % 2)
-								//	ImGui::DrawRectFilled(sf::FloatRect(0, 0, 400, 20), toSFColor(col));
+								//	ImGui::DrawRectFilled(sf::FloatRect(0, 0, 400, 20), toSDLColor(col));
 
 								ImGui::AlignTextToFramePadding();
 								ImGui::Text(ANSIToUTF8(l._name).c_str());
@@ -3641,7 +3641,7 @@ void LayerManager::DrawStatesGUI()
 
 				ImGui::SetCursorPos(renameButtonPos);
 				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, { 1,1 });
-				if (ImGui::ImageButton("renameBtn", *_editIcon, toSFVector(btnSize), sf::Color::Transparent, btnColor))
+				if (ImGui::ImageButton("renameBtn", *_editIcon, toRTVector(btnSize), sf::Color::Transparent, btnColor))
 				{
 					state._renaming = !state._renaming;
 				}
@@ -3799,7 +3799,7 @@ bool LayerManager::LayerInfo::EvaluateLayerVisibility()
 	return visible;
 }
 
-void LayerManager::LayerInfo::DoIndividualMotion(bool talking, bool screaming, float talkAmount, double& rot, sf::Vector2<double>& motionScale, ImVec4& activeSpriteCol, sf::Vector2<double>& motionPos)
+void LayerManager::LayerInfo::DoIndividualMotion(bool talking, bool screaming, float talkAmount, double& rot, Vector2<double>& motionScale, ImVec4& activeSpriteCol, Vector2<double>& motionPos)
 {
 	float newMotionY = 0;
 	float newMotionX = 0;
@@ -3819,7 +3819,7 @@ void LayerManager::LayerInfo::DoIndividualMotion(bool talking, bool screaming, f
 			newMotionX += _bounceMove.x * talkAmount;
 			newMotionY += _bounceMove.y * talkAmount;
 			rot += _bounceRotation * talkAmount;
-			motionScale += sf::Vector2<double>(_bounceScale * talkAmount);
+			motionScale += Vector2<double>(_bounceScale * talkAmount);
 		}
 		break;
 	case LayerManager::LayerInfo::BounceOnce:
@@ -3858,7 +3858,7 @@ void LayerManager::LayerInfo::DoIndividualMotion(bool talking, bool screaming, f
 				newMotionX += _bounceMove.x * bounceAmount;
 				newMotionY += _bounceMove.y * bounceAmount;
 				rot += _bounceRotation * bounceAmount;
-				motionScale += sf::Vector2<double>(_bounceScale * bounceAmount);
+				motionScale += Vector2<double>(_bounceScale * bounceAmount);
 			}
 		}
 
@@ -3936,7 +3936,7 @@ void LayerManager::LayerInfo::DoIndividualMotion(bool talking, bool screaming, f
 			activeSpriteCol = idleColAmount + breathColAmount;
 		}
 
-		motionScale = motionScale * sf::Vector2<double>(1.0, 1.0) + (double)_breathAmount.y * sf::Vector2<double>(_breathScale);
+		motionScale = motionScale * Vector2<double>(1.0, 1.0) + (double)_breathAmount.y * Vector2<double>(_breathScale);
 	}
 
 	_motionY += (newMotionY - _motionY) * 0.3f;
@@ -3946,7 +3946,7 @@ void LayerManager::LayerInfo::DoIndividualMotion(bool talking, bool screaming, f
 	motionPos.y -= _motionY;
 }
 
-void LayerManager::LayerInfo::CalculateInheritedMotion(sf::Vector2<double>& motionScale, sf::Vector2<double>& motionPos, double& motionRot, double& motionParentRot, ImVec4& motionTint, sf::Vector2<double>& physicsPos, bool becameVisible, SpriteSheet* lastActiveSprite, float timeMult)
+void LayerManager::LayerInfo::CalculateInheritedMotion(Vector2<double>& motionScale, Vector2<double>& motionPos, double& motionRot, double& motionParentRot, ImVec4& motionTint, Vector2<double>& physicsPos, bool becameVisible, SpriteSheet* lastActiveSprite, float timeMult)
 {
 	LayerInfo* mp = _parent->GetLayer(_motionParent);
 	if (mp)
@@ -3956,7 +3956,7 @@ void LayerManager::LayerInfo::CalculateInheritedMotion(sf::Vector2<double>& moti
 			motionDelayNow = 0;
 
 		double directParentRot = 0;
-		sf::Vector2<double> directParentScale = {1,1};
+		Vector2<double> directParentScale = {1,1};
 
 
 
@@ -4025,10 +4025,10 @@ void LayerManager::LayerInfo::CalculateInheritedMotion(sf::Vector2<double>& moti
 		directParentScale += {1, 1};
 
 		// transform this layer's position by the parent position
-		sf::Vector2<double> originalOffset = sf::Vector2<double>(_pos) - sf::Vector2<double>(mp->_pos);
-		sf::Vector2<double> originalOffsetRotated = Rotate(originalOffset, Deg2Rad(motionRot + motionParentRot));
-		sf::Vector2<double> offsetScaled = { originalOffsetRotated.x * directParentScale.x, originalOffsetRotated.y * directParentScale.y };
-		sf::Vector2<double> originMove = offsetScaled - originalOffset;
+		Vector2<double> originalOffset = Vector2<double>(_pos) - Vector2<double>(mp->_pos);
+		Vector2<double> originalOffsetRotated = Rotate(originalOffset, Deg2Rad(motionRot + motionParentRot));
+		Vector2<double> offsetScaled = { originalOffsetRotated.x * directParentScale.x, originalOffsetRotated.y * directParentScale.y };
+		Vector2<double> originMove = offsetScaled - originalOffset;
 
 		motionPos += originMove;
 
@@ -4052,27 +4052,27 @@ void LayerManager::LayerInfo::CalculateInheritedMotion(sf::Vector2<double>& moti
 			}
 
 			const MotionLinkData& lastFrame = _motionLinkData.front();
-			sf::Vector2<double> oldScale(lastFrame._scale.x, lastFrame._scale.y);
-			sf::Vector2<double> oldPos(lastFrame._physicsPos.x, lastFrame._physicsPos.y);
+			Vector2<double> oldScale(lastFrame._scale.x, lastFrame._scale.y);
+			Vector2<double> oldPos(lastFrame._physicsPos.x, lastFrame._physicsPos.y);
 
-			sf::Vector2<double> idealAccel = (sf::Vector2<double>(motionPos) - oldPos);
-			sf::Vector2<double> accel = sf::Vector2<double>(_lastAccel) + (idealAccel - sf::Vector2<double>(_lastAccel)) * (1.0f - motionSpring);
-			sf::Vector2<double> newPhysicsPos = oldPos + (1.0 - motionDrag) * accel * timeMult;
+			Vector2<double> idealAccel = (Vector2<double>(motionPos) - oldPos);
+			Vector2<double> accel = Vector2<double>(_lastAccel) + (idealAccel - Vector2<double>(_lastAccel)) * (1.0f - motionSpring);
+			Vector2<double> newPhysicsPos = oldPos + (1.0 - motionDrag) * accel * timeMult;
 			_lastAccel = accel;
 
-			sf::Vector2<double> offset = sf::Vector2<double>(motionPos) - newPhysicsPos;
+			Vector2<double> offset = Vector2<double>(motionPos) - newPhysicsPos;
 			double movementDist = Length(offset);
 
-			sf::Vector2<double> rotOffset = offset;
+			Vector2<double> rotOffset = offset;
 			if (!_parent->_appConfig->_undoRotationEffectFix)
 				rotOffset.x *= -1;
 
 			float totalRot = _rot + motionRot + motionParentRot;
 
-			sf::Vector2<double> pivotDiff = sf::Vector2<double>(_pivot) - sf::Vector2<double>(.5f, .5f);
+			Vector2<double> pivotDiff = Vector2<double>(_pivot) - Vector2<double>(.5f, .5f);
 			if (_physicsIgnorePivots)
 			{
-				pivotDiff = sf::Vector2<double>(-_weightDirection);
+				pivotDiff = Vector2<double>(-_weightDirection);
 			}
 			pivotDiff = Rotate(pivotDiff, Deg2Rad(totalRot));
 
@@ -4089,16 +4089,16 @@ void LayerManager::LayerInfo::CalculateInheritedMotion(sf::Vector2<double>& moti
 				totalRot = _rot + motionRot + motionParentRot;
 
 				//use pivot direction only as a means of deciding the squash direction, not for weighting/strength
-				sf::Vector2<double>pivotDirLocal = (sf::Vector2<double>(.5f, .5f) - sf::Vector2<double>(_pivot));
+				Vector2<double>pivotDirLocal = (Vector2<double>(.5f, .5f) - Vector2<double>(_pivot));
 				if (_physicsIgnorePivots)
-					pivotDirLocal = sf::Vector2<double>(_weightDirection);
+					pivotDirLocal = Vector2<double>(_weightDirection);
 
 				pivotDirLocal.x = pivotDirLocal.x == 0.0 ? 0.0 : 1.0 - 2.0 * (int)(pivotDirLocal.x < 0);
 				pivotDirLocal.y = pivotDirLocal.y == 0.0 ? 0.0 : 1.0 - 2.0 * (int)(pivotDirLocal.y < 0);
 
-				sf::Vector2<double> pivotStrength = sf::Vector2<double>(_motionStretchStrength.x * (pivotDirLocal.x == 0 ? 1 : pivotDirLocal.x), _motionStretchStrength.y * (pivotDirLocal.y == 0 ? 1 : pivotDirLocal.y));
+				Vector2<double> pivotStrength = Vector2<double>(_motionStretchStrength.x * (pivotDirLocal.x == 0 ? 1 : pivotDirLocal.x), _motionStretchStrength.y * (pivotDirLocal.y == 0 ? 1 : pivotDirLocal.y));
 				double pivotLen = Length(pivotDirLocal);
-				sf::Vector2<double> pivotDir = pivotDirLocal / (pivotLen == 0 ? 1 : pivotLen);
+				Vector2<double> pivotDir = pivotDirLocal / (pivotLen == 0 ? 1 : pivotLen);
 				float angle = pivotLen == 0 ? 0 : atan2(pivotDir.y, pivotDir.x);
 
 				// make the offset symmetrical if the corresponding pivot axis is 0
@@ -4109,10 +4109,10 @@ void LayerManager::LayerInfo::CalculateInheritedMotion(sf::Vector2<double>& moti
 					offset.y = -Abs(offset.y);
 
 				//rotate all to match the sprite
-				sf::Vector2<double> rotatedOffset = Rotate(offset, Deg2Rad(-totalRot));
-				sf::Vector2<double> rotatedOffsetDir = rotatedOffset / movementDist;
+				Vector2<double> rotatedOffset = Rotate(offset, Deg2Rad(-totalRot));
+				Vector2<double> rotatedOffsetDir = rotatedOffset / movementDist;
 
-				sf::Vector2<double> stretchFactor = pivotStrength * (movementDist / EllipseRadius(angle, _idleSprite->Size()));
+				Vector2<double> stretchFactor = pivotStrength * (movementDist / EllipseRadius(angle, _idleSprite->Size()));
 
 				float xStretch = -rotatedOffsetDir.x * stretchFactor.x;
 				float yStretch = -rotatedOffsetDir.y * stretchFactor.y;
@@ -4120,11 +4120,11 @@ void LayerManager::LayerInfo::CalculateInheritedMotion(sf::Vector2<double>& moti
 				{
 				case MS_PreserveVolume:
 				{
-					motionScale = motionScale * Clamp(sf::Vector2<double>(1.0 + xStretch - yStretch, 1.0 + yStretch - xStretch), sf::Vector2<double>(_stretchScaleMin), sf::Vector2<double>(_stretchScaleMax));
+					motionScale = motionScale * Clamp(Vector2<double>(1.0 + xStretch - yStretch, 1.0 + yStretch - xStretch), Vector2<double>(_stretchScaleMin), Vector2<double>(_stretchScaleMax));
 					break;
 				}
 				case MS_Linear:
-					motionScale = motionScale * Clamp(sf::Vector2<double>(1.0 + xStretch, 1.0 + yStretch), sf::Vector2<double>(_stretchScaleMin), sf::Vector2<double>(_stretchScaleMax));
+					motionScale = motionScale * Clamp(Vector2<double>(1.0 + xStretch, 1.0 + yStretch), Vector2<double>(_stretchScaleMin), Vector2<double>(_stretchScaleMax));
 					break;
 					//case MS_Circular:
 					//	break;
@@ -4142,7 +4142,7 @@ void LayerManager::LayerInfo::CalculateInheritedMotion(sf::Vector2<double>& moti
 			}
 			else if (_distanceLimit > 0.f && movementDist >= _distanceLimit)
 			{
-				sf::Vector2<double> offsetDir = offset / movementDist;
+				Vector2<double> offsetDir = offset / movementDist;
 				newPhysicsPos = motionPos - offsetDir * _distanceLimit;
 			}
 
@@ -4151,7 +4151,7 @@ void LayerManager::LayerInfo::CalculateInheritedMotion(sf::Vector2<double>& moti
 	}
 }
 
-void LayerManager::LayerInfo::DoConstantMotion(sf::Time& frameTime, sf::Vector2<double>& mpScale, sf::Vector2<double>& mpPos, double& mpRot)
+void LayerManager::LayerInfo::DoConstantMotion(sf::Time& frameTime, Vector2<double>& mpScale, Vector2<double>& mpPos, double& mpRot)
 {
 	_storedConstantRot += _constantRot * frameTime.asSeconds();
 
@@ -4238,13 +4238,13 @@ void LayerManager::LayerInfo::CalculateDraw(float windowHeight, float windowWidt
 
 	_wasTalking = talking;
 
-	sf::Vector2<double>  motionScale = { 1.0,1.0 };
-	sf::Vector2<double>  motionPos = { 0, 0 };
-	sf::Vector2<double>  physicsPos = motionPos;
+	Vector2<double>  motionScale = { 1.0,1.0 };
+	Vector2<double>  motionPos = { 0, 0 };
+	Vector2<double>  physicsPos = motionPos;
 	double motionRot = 0;
 	double motionParentRot = 0;
 	ImVec4 mpTint;
-	sf::Vector2<double> pivot = { _pivot.x * _idleSprite->Size().x, _pivot.y * _idleSprite->Size().y };
+	Vector2<double> pivot = { _pivot.x * _idleSprite->Size().x, _pivot.y * _idleSprite->Size().y };
 
 	bool hasParent = !(_motionParent == "" || _motionParent == "-1");
 	if (hasParent)
@@ -4299,12 +4299,12 @@ void LayerManager::LayerInfo::CalculateDraw(float windowHeight, float windowWidt
 	}
 
 	motionRot += _rot + motionParentRot;
-	motionPos += sf::Vector2<double>(_pos);
-	motionScale = sf::Vector2<double>(_scale) * motionScale;
+	motionPos += Vector2<double>(_pos);
+	motionScale = Vector2<double>(_scale) * motionScale;
 
-	_activeSprite->setOrigin(sf::Vector2f(pivot));
-	_activeSprite->setScale(sf::Vector2f(motionScale));
-	_activeSprite->setPosition(sf::Vector2f( windowWidth / 2 + motionPos.x, windowHeight / 2 + motionPos.y ));
+	_activeSprite->setOrigin(Vector2f(pivot));
+	_activeSprite->setScale(Vector2f(motionScale));
+	_activeSprite->setPosition(Vector2f( windowWidth / 2 + motionPos.x, windowHeight / 2 + motionPos.y ));
 	_activeSprite->setRotation(motionRot);
 	_activeSprite->SetColor(activeSpriteCol);
 
@@ -4388,13 +4388,13 @@ void LayerManager::LayerInfo::DetermineVisibleSprites(bool talking, bool screami
 	}
 }
 
-void LayerManager::LayerInfo::AddTrackingMovement(sf::Vector2<double>& mpPos, double& mpRot)
+void LayerManager::LayerInfo::AddTrackingMovement(Vector2<double>& mpPos, double& mpRot)
 {
 	bool doTracking = _trackingEnabled && (_trackingType != TRACKING_NONE);
 	if (!doTracking)
 		return;
 
-	sf::Vector2f newTrackingAmount = {0, 0};
+	Vector2f newTrackingAmount = {0, 0};
 
 	float mouseEffect = 1.f;
 	float axisEffect = 1.f;
@@ -4409,10 +4409,10 @@ void LayerManager::LayerInfo::AddTrackingMovement(sf::Vector2<double>& mpPos, do
 	{
 		if ((_trackingType & TRACKING_MOUSE) && _parent->_appConfig->_mouseTrackingEnabled)
 		{
-			sf::Vector2f mousePos = (sf::Vector2f)sf::Mouse::getPosition();
-			sf::Vector2f mouseMove = (mousePos - _mouseNeutralPos);
+			Vector2f mousePos = (Vector2f)sf::Mouse::getPosition();
+			Vector2f mouseMove = (mousePos - _mouseNeutralPos);
 
-			const sf::Vector2f mouseMult = Clamp(mouseMove / _mouseAreaSize, -1.f, 1.f);
+			const Vector2f mouseMult = Clamp(mouseMove / _mouseAreaSize, -1.f, 1.f);
 
 			newTrackingAmount += mouseMult*mouseEffect;
 		}
@@ -4436,7 +4436,7 @@ void LayerManager::LayerInfo::AddTrackingMovement(sf::Vector2<double>& mpPos, do
 
 			if (_trackingJoystick != -1 && sf::Joystick::isConnected(_trackingJoystick))
 			{
-				sf::Vector2f axisPos;
+				Vector2f axisPos;
 				switch (_trackingAxis)
 				{
 				case AXIS_XY:
@@ -4453,11 +4453,11 @@ void LayerManager::LayerInfo::AddTrackingMovement(sf::Vector2<double>& mpPos, do
 					break;
 				}
 
-				const sf::Vector2f deadspot(_axisDeadzone, _axisDeadzone);
-				const sf::Vector2f signAxis(axisPos.x >= 0 ? 1.f : -1.f, axisPos.y >= 0 ? 1.f : -1.f);
+				const Vector2f deadspot(_axisDeadzone, _axisDeadzone);
+				const Vector2f signAxis(axisPos.x >= 0 ? 1.f : -1.f, axisPos.y >= 0 ? 1.f : -1.f);
 				float axisLength = Length(axisPos);
-				const sf::Vector2f axisDir = axisLength > 0 ? axisPos / axisLength : sf::Vector2f(0.f, 0.f);
-				sf::Vector2f axisAmount;
+				const Vector2f axisDir = axisLength > 0 ? axisPos / axisLength : Vector2f(0.f, 0.f);
+				Vector2f axisAmount;
 				axisAmount.x = (Clamp(Abs(axisPos.x) - _axisDeadzone * Abs(axisDir.x), 0.f, 1.f) / (1.f - _axisDeadzone * Abs(axisDir.x))) * signAxis.x;
 				axisAmount.y = (Clamp(Abs(axisPos.y) - _axisDeadzone * Abs(axisDir.y), 0.f, 1.f) / (1.f - _axisDeadzone * Abs(axisDir.y))) * signAxis.y;
 
@@ -4479,8 +4479,8 @@ void LayerManager::LayerInfo::AddTrackingMovement(sf::Vector2<double>& mpPos, do
 			_trackingAmount = _trackingAmount / moveLength;
 	}
 
-	sf::Vector2<double> newTrackingPos = sf::Vector2<double>(_trackingAmount) * sf::Vector2<double>(_trackingMoveLimits);
-	sf::Vector2<double> newTrackingRot = sf::Vector2<double>(_trackingAmount) * sf::Vector2<double>(_trackingRotation);
+	Vector2<double> newTrackingPos = Vector2<double>(_trackingAmount) * Vector2<double>(_trackingMoveLimits);
+	Vector2<double> newTrackingRot = Vector2<double>(_trackingAmount) * Vector2<double>(_trackingRotation);
 
 	mpPos += newTrackingPos;
 	mpRot = mpRot + newTrackingRot.x + newTrackingRot.y;
@@ -4493,7 +4493,7 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 	float UIUnit = ImGui::GetFrameHeight();
 
 	ImVec4 col = style.Colors[ImGuiCol_Text];
-	sf::Color btnColor = toSFColor(col);
+	sf::Color btnColor = toSDLColor(col);
 
 	bool allowContinue = true;
 
@@ -4528,14 +4528,14 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 
 		name += "##0";
 
-		sf::Vector2f headerBtnSize(UIUnit - 2, UIUnit - 2);
+		Vector2f headerBtnSize(UIUnit - 2, UIUnit - 2);
 		ImVec2 headerButtonsPos = { ImGui::GetWindowWidth() - UIUnit * 7, ImGui::GetCursorPosY() };
 
 		float indentSize = 8 * uiScale;
 
-		_lastHeaderScreenPos = toSFVector(ImGui::GetCursorScreenPos());
-		_lastHeaderPos = toSFVector(ImGui::GetCursorPos());
-		_lastHeaderSize = sf::Vector2f(ImGui::GetContentRegionAvail().x - 8 * uiScale, ImGui::GetFrameHeight());
+		_lastHeaderScreenPos = toRTVector(ImGui::GetCursorScreenPos());
+		_lastHeaderPos = toRTVector(ImGui::GetCursorPos());
+		_lastHeaderSize = Vector2f(ImGui::GetContentRegionAvail().x - 8 * uiScale, ImGui::GetFrameHeight());
 
 		if (_isFolder)
 		{
@@ -4600,7 +4600,7 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 						ImageBrowsePreviewBtn(_importIdleOpen, "idleimgbtn", imgBtnWidth, _idleImagePath, _idleSprite.get());
 
 						ImGui::SameLine();
-						_spriteIdleOpen |= ImGui::ImageButton("idleanimbtn", *_animIcon, sf::Vector2f(animBtnWidth, animBtnWidth), sf::Color::Transparent, btnColor);
+						_spriteIdleOpen |= ImGui::ImageButton("idleanimbtn", *_animIcon, Vector2f(animBtnWidth, animBtnWidth), sf::Color::Transparent, btnColor);
 						ToolTip("Animation settings", &_parent->_appConfig->_hoverTimer);
 						AnimPopup(*_idleSprite, _spriteIdleOpen, _oldSpriteIdleOpen);
 
@@ -4637,7 +4637,7 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 
 							ImGui::SameLine();
 							ImGui::PushID("talkanimbtn"); {
-								_spriteTalkOpen |= ImGui::ImageButton("talkanimbtn", *_animIcon, sf::Vector2f(animBtnWidth, animBtnWidth), sf::Color::Transparent, btnColor);
+								_spriteTalkOpen |= ImGui::ImageButton("talkanimbtn", *_animIcon, Vector2f(animBtnWidth, animBtnWidth), sf::Color::Transparent, btnColor);
 								ToolTip("Animation Settings", &_parent->_appConfig->_hoverTimer);
 								AnimPopup(*_talkSprite, _spriteTalkOpen, _oldSpriteTalkOpen);
 							}ImGui::PopID();
@@ -4678,7 +4678,7 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 							ImGui::SameLine();
 							auto tintPos = ImGui::GetCursorPos();
 							ImGui::PushID("blinkanimbtn"); {
-								_spriteBlinkOpen |= ImGui::ImageButton("blinkanimbtn", *_animIcon, sf::Vector2f(animBtnWidth, animBtnWidth), sf::Color::Transparent, btnColor);
+								_spriteBlinkOpen |= ImGui::ImageButton("blinkanimbtn", *_animIcon, Vector2f(animBtnWidth, animBtnWidth), sf::Color::Transparent, btnColor);
 								tintPos.y += ImGui::GetItemRectSize().y;
 								ToolTip("Animation Settings", &_parent->_appConfig->_hoverTimer);
 								AnimPopup(*_blinkSprite, _spriteBlinkOpen, _oldSpriteBlinkOpen);
@@ -4717,7 +4717,7 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 								ImGui::SameLine();
 								auto tintPos = ImGui::GetCursorPos();
 								ImGui::PushID("talkblinkanimbtn"); {
-									_spriteTalkBlinkOpen |= ImGui::ImageButton("talkblinkanimbtn", *_animIcon, sf::Vector2f(animBtnWidth, animBtnWidth), sf::Color::Transparent, btnColor);
+									_spriteTalkBlinkOpen |= ImGui::ImageButton("talkblinkanimbtn", *_animIcon, Vector2f(animBtnWidth, animBtnWidth), sf::Color::Transparent, btnColor);
 									tintPos.y += ImGui::GetItemRectSize().y;
 									ToolTip("Animation Settings", &_parent->_appConfig->_hoverTimer);
 									AnimPopup(*_talkBlinkSprite, _spriteTalkBlinkOpen, _oldSpriteTalkBlinkOpen);
@@ -4905,7 +4905,7 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 
 						ImGui::SameLine();
 						ImGui::PushID("screamanimbtn"); {
-							_spriteScreamOpen |= ImGui::ImageButton("screamanimbtn", *_animIcon, sf::Vector2f(animBtnWidth, animBtnWidth), sf::Color::Transparent, btnColor);
+							_spriteScreamOpen |= ImGui::ImageButton("screamanimbtn", *_animIcon, Vector2f(animBtnWidth, animBtnWidth), sf::Color::Transparent, btnColor);
 							ToolTip("Animation Settings", &_parent->_appConfig->_hoverTimer);
 							AnimPopup(*_screamSprite, _spriteScreamOpen, _oldSpriteScreamOpen);
 						}ImGui::PopID();//screamanimbtn
@@ -5039,15 +5039,15 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 
 						if (_motionStretch != MS_None)
 						{
-							AddResetButton("stretchStrengthReset", _motionStretchStrength, sf::Vector2f(1.0f, 1.0f), _parent->_appConfig, &style);
+							AddResetButton("stretchStrengthReset", _motionStretchStrength, Vector2f(1.0f, 1.0f), _parent->_appConfig, &style);
 							Float2SliderDrag("Stretch strength", &_motionStretchStrength.x, -2.0f, 2.0f, "%.1f", 0, _parent->_uiConfig->_numberEditType);
 							ToolTip("Set the strength of the stretch effect.", &_parent->_appConfig->_hoverTimer);
 
-							AddResetButton("minStretchReset", _stretchScaleMin, sf::Vector2f(0.5f, 0.5f), _parent->_appConfig, &style);
+							AddResetButton("minStretchReset", _stretchScaleMin, Vector2f(0.5f, 0.5f), _parent->_appConfig, &style);
 							Float2SliderDrag("Min Scale", &_stretchScaleMin.x, -2.0f, 2.0f, "%.1f", 0, _parent->_uiConfig->_numberEditType);
 							ToolTip("Set the minimum scale that stretch can apply.", &_parent->_appConfig->_hoverTimer);
 
-							AddResetButton("maxStretchReset", _stretchScaleMax, sf::Vector2f(2.0f, 2.0f), _parent->_appConfig, &style);
+							AddResetButton("maxStretchReset", _stretchScaleMax, Vector2f(2.0f, 2.0f), _parent->_appConfig, &style);
 							Float2SliderDrag("Max Scale", &_stretchScaleMax.x, -2.0f, 2.0f, "%.1f", 0, _parent->_uiConfig->_numberEditType);
 							ToolTip("Set the maximum scale that stretch can apply.", &_parent->_appConfig->_hoverTimer);
 						}
@@ -5061,35 +5061,35 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 							float spacingY = style.ItemSpacing.y;
 							ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, { 0,0 });
 
-							if (ImGui::RadioButton("##topleft", _weightDirection == sf::Vector2f(-1.0, -1.0))) { _weightDirection = { -1.0, -1.0 }; }
+							if (ImGui::RadioButton("##topleft", _weightDirection == Vector2f(-1.0, -1.0))) { _weightDirection = { -1.0, -1.0 }; }
 							ToolTip("Manually set the direction of the heaviest\npart of the sprite.\n(Normally calculated from the pivot location)", &_parent->_appConfig->_hoverTimer);
 							ImGui::SameLine();
-							if (ImGui::RadioButton("##top", _weightDirection == sf::Vector2f(0.0, -1.0))) { _weightDirection = { 0.0, -1.0 }; }
+							if (ImGui::RadioButton("##top", _weightDirection == Vector2f(0.0, -1.0))) { _weightDirection = { 0.0, -1.0 }; }
 							ToolTip("Manually set the direction of the heaviest\npart of the sprite.\n(Normally calculated from the pivot location)", &_parent->_appConfig->_hoverTimer);
 							ImGui::SameLine();
-							if (ImGui::RadioButton("##topRight", _weightDirection == sf::Vector2f(1.0, -1.0))) { _weightDirection = { 1.0, -1.0 }; }
+							if (ImGui::RadioButton("##topRight", _weightDirection == Vector2f(1.0, -1.0))) { _weightDirection = { 1.0, -1.0 }; }
 							ToolTip("Manually set the direction of the heaviest\npart of the sprite.\n(Normally calculated from the pivot location)", &_parent->_appConfig->_hoverTimer);
 
-							if (ImGui::RadioButton("##left", _weightDirection == sf::Vector2f(-1.0, 0.0))) { _weightDirection = { -1.0, 0.0 }; }
+							if (ImGui::RadioButton("##left", _weightDirection == Vector2f(-1.0, 0.0))) { _weightDirection = { -1.0, 0.0 }; }
 							ToolTip("Manually set the direction of the heaviest\npart of the sprite.\n(Normally calculated from the pivot location)", &_parent->_appConfig->_hoverTimer);
 							ImGui::SameLine();
-							if (ImGui::RadioButton("##middle", _weightDirection == sf::Vector2f(0.0, 0.0))) { _weightDirection = { 0.0, 0.0 }; }
+							if (ImGui::RadioButton("##middle", _weightDirection == Vector2f(0.0, 0.0))) { _weightDirection = { 0.0, 0.0 }; }
 							ToolTip("Manually set the direction of the heaviest\npart of the sprite.\n(Normally calculated from the pivot location)", &_parent->_appConfig->_hoverTimer);
 							ImGui::SameLine();
-							if (ImGui::RadioButton("##right", _weightDirection == sf::Vector2f(1.0, 0.0))) { _weightDirection = { 1.0, 0.0 }; }
+							if (ImGui::RadioButton("##right", _weightDirection == Vector2f(1.0, 0.0))) { _weightDirection = { 1.0, 0.0 }; }
 							ToolTip("Manually set the direction of the heaviest\npart of the sprite.\n(Normally calculated from the pivot location)", &_parent->_appConfig->_hoverTimer);
 							ImGui::SameLine(0, spacing * 2);
 							ImGui::Text("Weight Direction");
 
 							ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, { 0,spacingY * 2 });
 
-							if (ImGui::RadioButton("##bottomleft", _weightDirection == sf::Vector2f(-1.0, 1.0))) { _weightDirection = { -1.0, 1.0 }; }
+							if (ImGui::RadioButton("##bottomleft", _weightDirection == Vector2f(-1.0, 1.0))) { _weightDirection = { -1.0, 1.0 }; }
 							ToolTip("Manually set the direction of the heaviest\npart of the sprite.\n(Normally calculated from the pivot location)", &_parent->_appConfig->_hoverTimer);
 							ImGui::SameLine();
-							if (ImGui::RadioButton("##bottom", _weightDirection == sf::Vector2f(0.0, 1.0))) { _weightDirection = { 0.0, 1.0 }; }
+							if (ImGui::RadioButton("##bottom", _weightDirection == Vector2f(0.0, 1.0))) { _weightDirection = { 0.0, 1.0 }; }
 							ToolTip("Manually set the direction of the heaviest\npart of the sprite.\n(Normally calculated from the pivot location)", &_parent->_appConfig->_hoverTimer);
 							ImGui::SameLine();
-							if (ImGui::RadioButton("##bottomright", _weightDirection == sf::Vector2f(1.0, 1.0))) { _weightDirection = { 1.0, 1.0 }; }
+							if (ImGui::RadioButton("##bottomright", _weightDirection == Vector2f(1.0, 1.0))) { _weightDirection = { 1.0, 1.0 }; }
 							ToolTip("Manually set the direction of the heaviest\npart of the sprite.\n(Normally calculated from the pivot location)", &_parent->_appConfig->_hoverTimer);
 
 							ImGui::PopStyleVar(2);
@@ -5426,13 +5426,13 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 				subHeaderBtnPos = { ImGui::GetWindowWidth() - headerBtnSize.x * 8, ImGui::GetCursorPosY() };
 				if (ImGui::CollapsingHeader("Tracking", ImGuiTreeNodeFlags_AllowOverlap))
 				{
-					const sf::Vector2f halfFullscreen(_parent->_appConfig->_fullScrW / 2, _parent->_appConfig->_fullScrH / 2);
-					if (_mouseNeutralPos == sf::Vector2f(-1.f, -1.f))
+					const Vector2f halfFullscreen(_parent->_appConfig->_fullScrW / 2, _parent->_appConfig->_fullScrH / 2);
+					if (_mouseNeutralPos == Vector2f(-1.f, -1.f))
 					{
 						_mouseNeutralPos = halfFullscreen;
 					}
 
-					if (_mouseAreaSize == sf::Vector2f(-1.f, -1.f))
+					if (_mouseAreaSize == Vector2f(-1.f, -1.f))
 					{
 						_mouseAreaSize = halfFullscreen;
 					}
@@ -5549,11 +5549,11 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 					FloatSliderDrag("Smooth", &_trackingSmooth, 0.f, 1.f, "%.2f", ImGuiInputTextFlags_CharsNoBlank, _parent->_uiConfig->_numberEditType);
 					ToolTip("How much to smooth the movement", &_parent->_appConfig->_hoverTimer);
 
-					AddResetButton("moveLimits", _trackingMoveLimits, sf::Vector2f(50.f, 50.f), _parent->_appConfig, &style);
+					AddResetButton("moveLimits", _trackingMoveLimits, Vector2f(50.f, 50.f), _parent->_appConfig, &style);
 					Float2SliderDrag("Movement Limits", &_trackingMoveLimits.x, -halfFullscreen.x, halfFullscreen.x, "%.1f px", 0, _parent->_uiConfig->_numberEditType);
 					ToolTip("The maximum offset applied to the layer position.", &_parent->_appConfig->_hoverTimer, true);
 
-					AddResetButton("rotLimits", _trackingRotation, sf::Vector2f(0.f, 0.f), _parent->_appConfig, &style);
+					AddResetButton("rotLimits", _trackingRotation, Vector2f(0.f, 0.f), _parent->_appConfig, &style);
 					Float2SliderDrag("Rotation Limits", &_trackingRotation.x, -180.f, 180.f, "%.1f deg", 0, _parent->_uiConfig->_numberEditType);
 					ToolTip("The maximum rotation applied to the layer.\n(First box is from horizontal movement, 2nd box from vertical)", &_parent->_appConfig->_hoverTimer, true);
 
@@ -5577,7 +5577,7 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 				{
 					BetterIndent(indentSize, "transforms" + _id);
 
-					AddResetButton("pos", _pos, sf::Vector2f(0.0, 0.0), _parent->_appConfig, &style);
+					AddResetButton("pos", _pos, Vector2f(0.0, 0.0), _parent->_appConfig, &style);
 					float pos[2] = { _pos.x, _pos.y };
 					ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x - style.ItemSpacing.x * 30);
 					if (Float2SliderDrag("Position", pos, -1000.0, 1000.f, "%.0f px", 0, _parent->_uiConfig->_numberEditType))
@@ -5595,7 +5595,7 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 						_rot = rot;
 					ToolTip("The rotation of this layer.", &_parent->_appConfig->_hoverTimer, true);
 
-					AddResetButton("scale", _scale, sf::Vector2f(1.0, 1.0), _parent->_appConfig, &style);
+					AddResetButton("scale", _scale, Vector2f(1.0, 1.0), _parent->_appConfig, &style);
 					float scale[2] = { _scale.x, _scale.y };
 					ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x - style.ItemSpacing.x * 30);
 					if (Float2SliderDrag("Scale", scale, 0.0, 5.f, "%.2f", 0, _parent->_uiConfig->_numberEditType))
@@ -5623,12 +5623,12 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 					ToolTip("Apply this rotation value to any layers using\nthis as a Motion Parent.\n\
 (This is different from the rotation in Individual Motion.\nChildrens' position will also be rotated.)", &_parent->_appConfig->_hoverTimer);
 
-					sf::Vector2f spriteSize = _idleSprite->Size();
+					Vector2f spriteSize = _idleSprite->Size();
 
-					sf::Vector2<double> prevPivot = _pivot;
-					AddResetButton("pivot", _pivot, sf::Vector2<double>(0.5, 0.5), _parent->_appConfig, &style);
+					Vector2<double> prevPivot = _pivot;
+					AddResetButton("pivot", _pivot, Vector2<double>(0.5, 0.5), _parent->_appConfig, &style);
 					if (prevPivot != _pivot && _parent->_pivotPreservePosition)
-						_pos += sf::Vector2f((_pivot - prevPivot) * sf::Vector2<double>(spriteSize) * sf::Vector2<double>(_scale));
+						_pos += Vector2f((_pivot - prevPivot) * Vector2<double>(spriteSize) * Vector2<double>(_scale));
 
 					std::vector<float> pivot = { (float)_pivot.x * 100, (float)_pivot.y * 100 };
 					std::string pivunit = "%";
@@ -5646,7 +5646,7 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 					ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x - style.ItemSpacing.x * 45);
 					if (Float2SliderDrag("Pivot Point", pivot.data(), pivmin, pivmax, pivfmt.c_str(), 0, _parent->_uiConfig->_numberEditType))
 					{
-						sf::Vector2<double> prevPivot = _pivot;
+						Vector2<double> prevPivot = _pivot;
 
 						if (!_pivotPx)
 						{
@@ -5661,9 +5661,9 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 
 						if (_parent->_pivotPreservePosition)
 						{
-							sf::Vector2<double> pivotDiff = _pivot - prevPivot;
-							sf::Vector2<double> pivotRotatedDiff = Rotate(pivotDiff, Deg2Rad(_rot));
-							_pos += sf::Vector2f(pivotRotatedDiff * sf::Vector2<double>(spriteSize) * sf::Vector2<double>(_scale));
+							Vector2<double> pivotDiff = _pivot - prevPivot;
+							Vector2<double> pivotRotatedDiff = Rotate(pivotDiff, Deg2Rad(_rot));
+							_pos += Vector2f(pivotRotatedDiff * Vector2<double>(spriteSize) * Vector2<double>(_scale));
 						}
 
 					}
@@ -5818,8 +5818,8 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 			{
 				float fp = ImGui::GetStyle().FramePadding.y;
 				ImVec2 btnSize = { ImGui::GetFrameHeight(), ImGui::GetFrameHeight() };
-				sf::Vector2f imgBtnSize = { ImGui::GetFrameHeight() - fp * 2,ImGui::GetFrameHeight() - fp * 2 };
-				auto textCol = toSFColor(ImGui::GetStyleColorVec4(ImGuiCol_Text));
+				Vector2f imgBtnSize = { ImGui::GetFrameHeight() - fp * 2,ImGui::GetFrameHeight() - fp * 2 };
+				auto textCol = toSDLColor(ImGui::GetStyleColorVec4(ImGuiCol_Text));
 
 				ImGui::TableNextColumn();
 
@@ -5959,7 +5959,7 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 void LayerManager::LayerInfo::ImageBrowsePreviewBtn(bool& openFlag, const char* btnname, float imgBtnWidth, std::string& path, SpriteSheet* sprite)
 {
 	bool emptyTex = !sprite->HasTexture();
-	sf::Color btnCol = emptyTex ? toSFColor(ImGui::GetStyleColorVec4(ImGuiCol_Text)) : sf::Color::White;
+	sf::Color btnCol = emptyTex ? toSDLColor(ImGui::GetStyleColorVec4(ImGuiCol_Text)) : sf::Color::White;
 	sf::Texture* btnIcon = emptyTex ? _emptyIcon : sprite->getTexture();
 
 	bool reloading = false;
@@ -6000,7 +6000,7 @@ void LayerManager::LayerInfo::DrawThresholdBar(float thresholdLevel, float thres
 
 	auto drawList = ImGui::GetWindowDrawList();
 
-	sf::Vector2f topLeft = { barPos.x, barPos.y };
+	Vector2f topLeft = { barPos.x, barPos.y };
 	//float barWidth = (ImGui::GetWindowWidth() - topLeft.x) - 148;
 	float barHeight = 10 * uiScale;
 	ImVec2 volumeBarTL = { topLeft.x, topLeft.y };
