@@ -5,13 +5,12 @@ add_executable(RahiTuber)
 
 target_include_directories(RahiTuber PRIVATE
     ./
-    ./imgui-sfml
     ${CMAKE_SOURCE_DIR}/Libraries/freetype/include
     ${CMAKE_SOURCE_DIR}/Libraries/imgui
     ${CMAKE_SOURCE_DIR}/Libraries/mongoose
     ${CMAKE_SOURCE_DIR}/Libraries/portaudio/include
-    ${CMAKE_SOURCE_DIR}/Libraries/SFML/include
     ${CMAKE_SOURCE_DIR}/Libraries/tinyxml2
+    ${CMAKE_SOURCE_DIR}/Libraries/SDL/include
 )
 
 if(WIN32)
@@ -19,12 +18,6 @@ if(WIN32)
 endif()
 
 target_sources(RahiTuber PRIVATE
-    imgui-sfml/GL/glext.h
-    imgui-sfml/KHR/khrplatform.h
-    imgui-sfml/imconfig-SFML.h
-    imgui-sfml/imgui-SFML.cpp
-    imgui-sfml/imgui-SFML.h
-    imgui-sfml/imgui-SFML_export.h
     Config.h
     defines.h
     file_browser_modal.cpp
@@ -72,9 +65,7 @@ target_link_libraries(RahiTuber PRIVATE ${OPENGL_LIBRARY}
     imgui
     portaudio_static
     tinyxml2
-    sfml-graphics
-    sfml-window
-    sfml-system
+    SDL3::SDL3
 )
 
 if(WIN32)

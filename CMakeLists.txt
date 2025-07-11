@@ -12,8 +12,6 @@ endif()
 #
 # Option prep
 #
-add_compile_definitions(SFML_STATIC)
-set(BUILD_SHARED_LIBS OFF CACHE BOOL "Turn off to disable SFML building shared libs" FORCE)
 set(PA_DISABLE_INSTALL ON CACHE BOOL "Disable targets install and uninstall (for embedded builds)" FORCE)
 set(tinyxml2_BUILD_TESTING OFF CACHE BOOL "Build tests for tinyxml2" FORCE)
 set(SPOUT_BUILD_CMT OFF CACHE BOOL "For Visual Studio - build /MT to link runtime libraries" FORCE)
@@ -23,11 +21,11 @@ set(SPOUT_BUILD_CMT OFF CACHE BOOL "For Visual Studio - build /MT to link runtim
 #
 add_subdirectory(Libraries/freetype)
 add_subdirectory(Libraries/portaudio)
-add_subdirectory(Libraries/SFML)
 if(WIN32)
     add_subdirectory(Libraries/Spout2)
 endif()
 add_subdirectory(Libraries/tinyxml2)
+add_subdirectory(Libraries/SDL EXCLUDE_FROM_ALL)
 
 # Set folder of Spout projects (for IDEs which support them)
 if(WIN32)
@@ -39,7 +37,6 @@ endif()
 include(imgui) # imgui doesn't ship with a standard CMakeLists.txt
 include(mongoose) # mongoose doesn't ship with a standard CMakeLists.txt
 
-target_include_directories(sfml-graphics PRIVATE ${CMAKE_SOURCE_DIR}/Libraries/freetype/include)
 target_include_directories(freetype PRIVATE ${PROJECT_BINARY_DIR}/include/freetype/config)
 
 #
