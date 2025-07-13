@@ -168,6 +168,7 @@ public:
 
 using Vector2f = Vector2<float>;
 using Vector2i = Vector2<int>;
+using Vector2u = Vector2<unsigned int>;
 
 inline bool operator ==(const ImVec4& left, const ImVec4& right)
 {

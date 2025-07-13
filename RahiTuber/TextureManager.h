@@ -1,14 +1,15 @@
 #pragma once
 
-#include "SFML/Graphics.hpp"
-#include "SFML/Main.hpp"
-#include "SFML/System.hpp"
+#include <SDL3/SDL.h>
 
 #include <cstring>
 #include <fstream>
 #include <iostream>
+#include <map>
 #include <memory>
 #include <mutex>
+
+#include "rtmath.h"
 
 #ifndef _WIN32
 typedef  __uint32_t uint32_t;
@@ -62,13 +63,13 @@ public:
 
 
 	bool LoadTexture(const std::string& path, void* caller, std::string* errString = nullptr);
-	bool LoadIcon(const std::string& path, sf::Texture*& storage);
+	bool LoadIcon(const std::string& path, SDL_Texture*& storage);
 
 	void UnloadTexture(const std::string& path, void* caller);
 
 	void Reset();
 
-	sf::Texture* GetIcon(IconID id);
+	SDL_Texture* GetIcon(IconID id);
 
 private:
 
@@ -80,7 +81,7 @@ private:
 
 	std::map<std::string, TextureItem> _textures;
 
-	std::map<IconID, sf::Texture*> _icons;
+	std::map<IconID, SDL_Texture*> _icons;
 
 	std::mutex _loadMutex;
 

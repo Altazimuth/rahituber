@@ -2,7 +2,6 @@
 
 #include <limits>
 #include <imgui.h>
-#include "imgui-SFML.h"
 #include "imgui_internal.h"
 
 #ifdef _WIN32

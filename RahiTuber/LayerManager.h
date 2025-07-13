@@ -21,25 +21,25 @@ namespace fs = std::filesystem;
 
 #include <thread>
 
-static std::map<std::string, sf::BlendMode> g_blendmodes = {
-	{"Normal", sf::BlendMode(sf::BlendMode::One, sf::BlendMode::OneMinusSrcAlpha, sf::BlendMode::Add,
-												sf::BlendMode::One, sf::BlendMode::OneMinusSrcAlpha, sf::BlendMode::Add)},
-	{"Lighten", sf::BlendMode(sf::BlendMode::One, sf::BlendMode::One, sf::BlendMode::Max,
-												sf::BlendMode::Zero, sf::BlendMode::One, sf::BlendMode::Add)},
-	{"Darken", sf::BlendMode(sf::BlendMode::One, sf::BlendMode::One, sf::BlendMode::Min,
-												sf::BlendMode::Zero, sf::BlendMode::One, sf::BlendMode::Add)},
-	{"Add", sf::BlendMode(sf::BlendMode::SrcAlpha, sf::BlendMode::One, sf::BlendMode::Add,
-												sf::BlendMode::Zero, sf::BlendMode::One, sf::BlendMode::ReverseSubtract)},
-	{"Multiply", sf::BlendMode(sf::BlendMode::DstColor, sf::BlendMode::OneMinusSrcAlpha, sf::BlendMode::Add,
-												sf::BlendMode::Zero, sf::BlendMode::One, sf::BlendMode::ReverseSubtract)},
-	{"Subtract", sf::BlendMode(sf::BlendMode::SrcAlpha, sf::BlendMode::One, sf::BlendMode::ReverseSubtract,
-												sf::BlendMode::Zero, sf::BlendMode::One, sf::BlendMode::ReverseSubtract)},
-	{"Overwrite", sf::BlendMode(sf::BlendMode::One, sf::BlendMode::Zero, sf::BlendMode::Add,
-												sf::BlendMode::One, sf::BlendMode::Zero, sf::BlendMode::Add)},
-	{"Erase", sf::BlendMode(sf::BlendMode::Zero, sf::BlendMode::One, sf::BlendMode::Add,
-												sf::BlendMode::Zero, sf::BlendMode::OneMinusSrcAlpha, sf::BlendMode::Add)},
-	{"Clip to Backdrop", sf::BlendMode(sf::BlendMode::DstAlpha, sf::BlendMode::OneMinusSrcAlpha, sf::BlendMode::Add,
-												sf::BlendMode::DstAlpha, sf::BlendMode::OneMinusSrcAlpha, sf::BlendMode::Add)},
+static std::map<std::string, SDL_BlendMode> g_blendmodes = {
+	{"Normal", SDL_ComposeCustomBlendMode(SDL_BLENDFACTOR_ONE, SDL_BLENDFACTOR_ONE_MINUS_SRC_ALPHA, SDL_BLENDOPERATION_ADD,
+												SDL_BLENDFACTOR_ONE, SDL_BLENDFACTOR_ONE_MINUS_SRC_ALPHA, SDL_BLENDOPERATION_ADD)},
+	{"Lighten", SDL_ComposeCustomBlendMode(SDL_BLENDFACTOR_ONE, SDL_BLENDFACTOR_ONE, SDL_BLENDOPERATION_MAXIMUM,
+												SDL_BLENDFACTOR_ZERO, SDL_BLENDFACTOR_ONE, SDL_BLENDOPERATION_ADD)},
+	{"Darken", SDL_ComposeCustomBlendMode(SDL_BLENDFACTOR_ONE, SDL_BLENDFACTOR_ONE, SDL_BLENDOPERATION_MINIMUM,
+												SDL_BLENDFACTOR_ZERO, SDL_BLENDFACTOR_ONE, SDL_BLENDOPERATION_ADD)},
+	{"Add", SDL_ComposeCustomBlendMode(SDL_BLENDFACTOR_SRC_ALPHA, SDL_BLENDFACTOR_ONE, SDL_BLENDOPERATION_ADD,
+												SDL_BLENDFACTOR_ZERO, SDL_BLENDFACTOR_ONE, SDL_BLENDOPERATION_REV_SUBTRACT)},
+	{"Multiply", SDL_ComposeCustomBlendMode(SDL_BLENDFACTOR_DST_COLOR, SDL_BLENDFACTOR_ONE_MINUS_SRC_ALPHA, SDL_BLENDOPERATION_ADD,
+												SDL_BLENDFACTOR_ZERO, SDL_BLENDFACTOR_ONE, SDL_BLENDOPERATION_REV_SUBTRACT)},
+	{"Subtract", SDL_ComposeCustomBlendMode(SDL_BLENDFACTOR_SRC_ALPHA, SDL_BLENDFACTOR_ONE, SDL_BLENDOPERATION_REV_SUBTRACT,
+												SDL_BLENDFACTOR_ZERO, SDL_BLENDFACTOR_ONE, SDL_BLENDOPERATION_REV_SUBTRACT)},
+	{"Overwrite", SDL_ComposeCustomBlendMode(SDL_BLENDFACTOR_ONE, SDL_BLENDFACTOR_ZERO, SDL_BLENDOPERATION_ADD,
+												SDL_BLENDFACTOR_ONE, SDL_BLENDFACTOR_ZERO, SDL_BLENDOPERATION_ADD)},
+	{"Erase", SDL_ComposeCustomBlendMode(SDL_BLENDFACTOR_ZERO, SDL_BLENDFACTOR_ONE, SDL_BLENDOPERATION_ADD,
+												SDL_BLENDFACTOR_ZERO, SDL_BLENDFACTOR_ONE_MINUS_SRC_ALPHA, SDL_BLENDOPERATION_ADD)},
+	{"Clip to Backdrop", SDL_ComposeCustomBlendMode(SDL_BLENDFACTOR_DST_ALPHA, SDL_BLENDFACTOR_ONE_MINUS_SRC_ALPHA, SDL_BLENDOPERATION_ADD,
+												SDL_BLENDFACTOR_DST_ALPHA, SDL_BLENDFACTOR_ONE_MINUS_SRC_ALPHA, SDL_BLENDOPERATION_ADD)},
 };
 
 enum MotionStretchType {
@@ -180,7 +180,7 @@ public:
 		Vector2<double> _pivot = { 0.5, 0.5 };
 		bool _pivotPx = false;
 
-		sf::BlendMode _blendMode = g_blendmodes["Normal"];
+		SDL_BlendMode _blendMode = g_blendmodes["Normal"];
 		/*Shader _blendingShader;
 		bool _blendingShaderLoaded = false;*/
 
@@ -372,8 +372,8 @@ public:
 		bool _active = false;
 		bool _alternateHeld = false;
 
-		sf::Keyboard::Key _key = sf::Keyboard::Unknown;
-		sf::Keyboard::Scan::Scancode _scancode = sf::Keyboard::Scan::Unknown;
+		SDL_Keycode _key = SDLK_UNKNOWN;
+		SDL_Scancode _scancode = SDL_SCANCODE_UNKNOWN;
 		bool _ctrl = false;
 		bool _shift = false;
 		bool _alt = false;
@@ -482,44 +482,51 @@ public:
 	void SetUnloadingTimer(int timer);
 
 	bool PendingHotkey() { return _waitingForHotkey; }
-	void SetHotkeys(const sf::Event& evt)
+	void SetHotkeys(const SDL_Event& evt)
 	{
-		if (evt.type == sf::Event::JoystickMoved && _statesIgnoreStick)
+		if (evt.type == SDL_EVENT_JOYSTICK_AXIS_MOTION && _statesIgnoreStick)
 			return;
 
 		_pendingMouseButton = -1;
-		if (evt.type == sf::Event::KeyPressed)
+		if (evt.type == SDL_EVENT_KEY_DOWN)
 		{
-			_pendingKey = evt.key.code;
+			_pendingKey = evt.key.key;
 			_pendingKeyScan = evt.key.scancode;
-			_pendingCtrl = evt.key.control;
-			_pendingShift = evt.key.shift;
-			_pendingAlt = evt.key.alt;
+			_pendingCtrl = !!(evt.key.mod & SDL_KMOD_CTRL);
+			_pendingShift = !!(evt.key.mod & SDL_KMOD_SHIFT);
+			_pendingAlt = !!(evt.key.mod & SDL_KMOD_ALT);
 		}
 
-		if (evt.type == sf::Event::MouseButtonPressed)
+		if (evt.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
 		{
-			_pendingMouseButton = (int)evt.mouseButton.button;
-			_pendingCtrl = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::RControl);
-			_pendingShift = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift);
-			_pendingAlt = sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) || sf::Keyboard::isKeyPressed(sf::Keyboard::RAlt);
+			_pendingMouseButton = (int)evt.button.button;
+
+			int numKeys;
+			const bool *keysDown = SDL_GetKeyboardState(&numKeys);
+
+			if (keysDown && numKeys >= SDL_SCANCODE_RALT)
+			{
+				_pendingCtrl = keysDown[SDL_SCANCODE_LCTRL] || keysDown[SDL_SCANCODE_RCTRL];
+				_pendingShift = keysDown[SDL_SCANCODE_LSHIFT] || keysDown[SDL_SCANCODE_RSHIFT];
+				_pendingAlt = keysDown[SDL_SCANCODE_LALT] || keysDown[SDL_SCANCODE_RALT];
+			}
 		}
 
 		_pendingJPadID = -1;
 
 		//_pendingJStick = evt.joystickMove.joystickId;
-		if (evt.type == sf::Event::JoystickMoved)
+		if (evt.type == SDL_EVENT_JOYSTICK_AXIS_MOTION)
 		{
-			_pendingJAxis = evt.joystickMove.axis;
-			_pendingJDir = evt.joystickMove.position;
-			_pendingJPadID = evt.joystickMove.joystickId;
+			_pendingJAxis = evt.jaxis.axis;
+			_pendingJDir = evt.jaxis.value;
+			_pendingJPadID = evt.jaxis.which;
 		}
 
 		//_pendingJButtonSID = evt.joystickButton.joystickId;
-		if (evt.type == sf::Event::JoystickButtonPressed)
+		if (evt.type == SDL_EVENT_JOYSTICK_BUTTON_DOWN)
 		{
-			_pendingJButton = evt.joystickButton.button;
-			_pendingJPadID = evt.joystickButton.joystickId;
+			_pendingJButton = evt.jbutton.button;
+			_pendingJPadID = evt.jbutton.which;
 		}
 		else
 			_pendingJButton = -1;
@@ -633,8 +640,8 @@ private:
 	bool _statesMenuOpen = false;
 	bool _oldStatesMenuOpen = false;
 	bool _waitingForHotkey = false;
-	sf::Keyboard::Key _pendingKey = sf::Keyboard::Unknown;
-	sf::Keyboard::Scan::Scancode _pendingKeyScan = sf::Keyboard::Scan::Unknown;
+	SDL_Keycode _pendingKey = SDLK_UNKNOWN;
+	SDL_Scancode _pendingKeyScan = SDL_SCANCODE_UNKNOWN;
 	bool _pendingCtrl = false;
 	bool _pendingShift = false;
 	bool _pendingAlt = false;
@@ -811,32 +818,32 @@ private:
 
 };
 
-static sf::Texture* _resetIcon = nullptr;
-static sf::Texture* _emptyIcon = nullptr;
-static sf::Texture* _animIcon = nullptr;
-static sf::Texture* _upIcon = nullptr;
-static sf::Texture* _dnIcon = nullptr;
-static sf::Texture* _editIcon = nullptr;
-static sf::Texture* _delIcon = nullptr;
-static sf::Texture* _dupeIcon = nullptr;
-static sf::Texture* _newFileIcon = nullptr;
-static sf::Texture* _openFileIcon = nullptr;
-static sf::Texture* _saveIcon = nullptr;
-static sf::Texture* _saveAsIcon = nullptr;
-static sf::Texture* _makePortableIcon = nullptr;
-static sf::Texture* _reloadIcon = nullptr;
-static sf::Texture* _newLayerIcon = nullptr;
-static sf::Texture* _newFolderIcon = nullptr;
-static sf::Texture* _statesIcon = nullptr;
-static sf::Texture* _plusIcon = nullptr;
+static SDL_Texture* _resetIcon = nullptr;
+static SDL_Texture* _emptyIcon = nullptr;
+static SDL_Texture* _animIcon = nullptr;
+static SDL_Texture* _upIcon = nullptr;
+static SDL_Texture* _dnIcon = nullptr;
+static SDL_Texture* _editIcon = nullptr;
+static SDL_Texture* _delIcon = nullptr;
+static SDL_Texture* _dupeIcon = nullptr;
+static SDL_Texture* _newFileIcon = nullptr;
+static SDL_Texture* _openFileIcon = nullptr;
+static SDL_Texture* _saveIcon = nullptr;
+static SDL_Texture* _saveAsIcon = nullptr;
+static SDL_Texture* _makePortableIcon = nullptr;
+static SDL_Texture* _reloadIcon = nullptr;
+static SDL_Texture* _newLayerIcon = nullptr;
+static SDL_Texture* _newFolderIcon = nullptr;
+static SDL_Texture* _statesIcon = nullptr;
+static SDL_Texture* _plusIcon = nullptr;
 
-static sf::Texture* _lockOpenIcon = nullptr;
-static sf::Texture* _lockClosedIcon = nullptr;
-static sf::Texture* _eyeOpenIcon = nullptr;
-static sf::Texture* _eyeClosedIcon = nullptr;
+static SDL_Texture* _lockOpenIcon = nullptr;
+static SDL_Texture* _lockClosedIcon = nullptr;
+static SDL_Texture* _eyeOpenIcon = nullptr;
+static SDL_Texture* _eyeClosedIcon = nullptr;
 
-static sf::Texture* _pinIcon = nullptr;
-static sf::Texture* _pinOffIcon = nullptr;
+static SDL_Texture* _pinIcon = nullptr;
+static SDL_Texture* _pinOffIcon = nullptr;
 
 
 template <typename T>

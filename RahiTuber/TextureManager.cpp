@@ -54,8 +54,9 @@ void TextureManager::LoadIcons(const std::string& appLocation)
 	if (_icons.count(ICON_PIN_OFF) == 0)
 		LoadIcon(appLocation + "res/pin_off.png", _icons[ICON_PIN_OFF]);
 
-	for (auto& ic : _icons)
-		ic.second->setSmooth(true);
+	// SDL_FIXME
+	//for (auto& ic : _icons)
+	//	ic.second->setSmooth(true);
 }
 
 sf::Texture* TextureManager::GetTexture(const std::string& path, void* caller, std::string* errString)
@@ -93,26 +94,24 @@ sf::Texture* TextureManager::GetTexture(const std::string& path, void* caller, s
 	return out;
 }
 
-bool TextureManager::LoadIcon(const std::string& path, sf::Texture*& storage)
+bool TextureManager::LoadIcon(const std::string& path, SDL_Texture*& storage)
 {
-	storage = new sf::Texture();
+	storage = nullptr;
 	int tries = 5;
 	while (tries > 0)
 	{
 		bool success = false;
 		std::string err = "";
-		try
-		{
-			success = storage->loadFromFile(path);
-		}
-		catch (const std::exception& exc)
-		{
-			err = ": " + std::string(exc.what());
-		}
+		storage = IMG_LoadTexture(_renderer, path);
+		success = storage != nullptr;
 
 		if (success)
 		{
 			return true;
+		}
+		else
+		{
+			err = ": " + std::string(SDL_GetError());
 		}
 
 		tries--;
@@ -210,7 +209,7 @@ void TextureManager::Reset()
 	_textures.clear();
 }
 
-sf::Texture* TextureManager::GetIcon(IconID id)
+SDL_Texture* TextureManager::GetIcon(IconID id)
 {
 	if (_icons.count(id))
 		return _icons[id];

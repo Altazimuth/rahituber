@@ -269,7 +269,7 @@ public:
 		return false;
 	}
 
-	float CheckMonitorScaleFactor(const sf::Vector2i& windowPos, const sf::Vector2u windowSize)
+	float CheckMonitorScaleFactor(const Vector2i& windowPos, const Vector2u windowSize)
 	{
 		float scaleFactor = 1.0;
 #ifdef _WIN32

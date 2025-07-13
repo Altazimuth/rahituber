@@ -1,12 +1,10 @@
 #pragma once
 
-#include "SFML/Graphics.hpp"
-#include "SFML/Main.hpp"
-#include "SFML/System.hpp"
-
 #include "imgui.h"
+#include "rtmath.h"
 #include "TextureManager.h"
 #include <thread>
+#include <vector>
 
 class SpriteSheet
 {
@@ -35,9 +33,9 @@ public:
 
 	inline sf::Texture* getTexture() { return _tex; }
 
-	inline void SetColor(const ImVec4& col) { _sprite.setColor({ sf::Uint8(255 * col.x), sf::Uint8(255 * col.y),sf::Uint8(255 * col.z),sf::Uint8(255 * col.w) }); }
-	inline void SetColor(const std::vector<float>& col) { _sprite.setColor({ sf::Uint8(255 * col[0]), sf::Uint8(255 * col[1]),sf::Uint8(255 * col[2]),sf::Uint8(255 * col[3]) }); }
-	inline void SetColor(float* col) { _sprite.setColor({ sf::Uint8(255*col[0]), sf::Uint8(255*col[1]),sf::Uint8(255*col[2]),sf::Uint8(255*col[3]) }); }
+	inline void SetColor(const ImVec4& col) { _sprite.setColor({ Uint8(255 * col.x), Uint8(255 * col.y),Uint8(255 * col.z),Uint8(255 * col.w) }); }
+	inline void SetColor(const std::vector<float>& col) { _sprite.setColor({ Uint8(255 * col[0]), Uint8(255 * col[1]),Uint8(255 * col[2]),Uint8(255 * col[3]) }); }
+	inline void SetColor(float* col) { _sprite.setColor({ Uint8(255*col[0]), Uint8(255*col[1]),Uint8(255*col[2]),Uint8(255*col[3]) }); }
 	inline void SetColor(const sf::Color col) { _sprite.setColor(col); }
 
 	inline Vector2f Size() const { return _spriteSize; }
@@ -141,7 +139,7 @@ private:
 	int _maxFrame = 0;
 	int _currentFrame = 0;
 	float _fps = 12;
-	std::vector<sf::IntRect> _frameRects;
+	std::vector<SDL_Rect> _frameRects;
 
 	bool _playing = false;
 

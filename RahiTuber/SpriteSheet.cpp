@@ -115,7 +115,7 @@ void SpriteSheet::SetAttributes(int frameCount, int gridX, int gridY, float fps,
 	{
 		for (int x = 0; x < gridX && fCount < frameCount; x++)
 		{
-			_frameRects.push_back(sf::IntRect(x * frameSize.x, y * frameSize.y, frameSize.x, frameSize.y));
+			_frameRects.push_back(SDL_Rect{x * (int)frameSize.x, y * (int)frameSize.y, (int)frameSize.x, (int)frameSize.y});
 			fCount++;
 		}
 	}
