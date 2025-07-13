@@ -6,6 +6,11 @@ template<typename T>
 class Vector2
 {
 public:
+	Vector2()
+		: x({}), y({})
+	{
+	}
+
 	Vector2(const T in_x, const T in_y)
 		: x(in_x), y(in_y)
 	{

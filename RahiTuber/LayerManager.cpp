@@ -382,19 +382,19 @@ void LayerManager::Draw(sf::RenderTarget* target, float windowHeight, float wind
 				Vector2f boxSize = { size.x * scale.x, size.y * scale.y };
 				Vector2f boxOrigin = { origin.x * scale.x, origin.y * scale.y };
 
-				sf::Color brightColor = toSDLColor(theme.second + ImVec4(0.2, 0.2, 0.2, 0.2));
+				ImVec4 brightColor = theme.second + ImVec4(0.2, 0.2, 0.2, 0.2);
 
 				auto box = sf::RectangleShape(boxSize);
 				box.setOrigin(boxOrigin);
 				box.setPosition(pos);
 				box.setRotation(rot);
-				box.setOutlineColor(toSDLColor(theme.first + ImVec4(0.2, 0.2, 0.2, 0.2)));
+				box.setOutlineColor(theme.first + ImVec4(0.2, 0.2, 0.2, 0.2));
 				box.setOutlineThickness((1.0f / _globalScale.x) * _appConfig->mainWindowScaling);
-				sf::Color fill = brightColor;
+				ImVec4 fill = brightColor;
 				if (layerHovered && _uiConfig->_hilightHovered)
-					fill.a = 40;
+					fill.w = 40;
 				else
-					fill.a = 0;
+					fill.w = 0;
 				box.setFillColor(fill);
 
 				float circleRadius = 3 * _appConfig->mainWindowScaling;
@@ -791,26 +791,32 @@ void LayerManager::DrawButtonsLayerSetUI()
 	float uiScale = _appConfig->scalingFactor;
 	float btnSize = uiScale * 38;
 	float separatorY = btnSize / 2 - uiScale * 5;
-	sf::Color btnColor = toSDLColor(ImGui::GetStyleColorVec4(ImGuiCol_Text));
+	ImVec4 btnColor = ImGui::GetStyleColorVec4(ImGuiCol_Text);
 	if (ImGui::BeginTable("##toolButtons", 11, ImGuiTableFlags_NoBordersInBody | ImGuiTableFlags_SizingStretchProp))
 	{
 		ImGui::TableNextColumn();
-		_newXMLOpen = ImGui::ImageButton("##newFile", *_newFileIcon, Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor);
+		_newXMLOpen = ImGui::ImageButton("##newFile", (ImTextureID)_newFileIcon, ImVec2(btnSize, btnSize), ImVec2(0, 0), ImVec2(1, 1),
+					ImVec4(0, 0, 0, 0), btnColor);
 		ToolTip("New", "Start a new layer set.\n(discards unsaved changes!)", &_appConfig->_hoverTimer);
 		ImGui::TableNextColumn();
-		_loadXMLOpen = ImGui::ImageButton("##Open", *_openFileIcon, Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor);
+		_loadXMLOpen = ImGui::ImageButton("##Open", (ImTextureID)_openFileIcon, ImVec2(btnSize, btnSize), ImVec2(0, 0), ImVec2(1, 1),
+					ImVec4(0, 0, 0, 0), btnColor);
 		ToolTip("Open", "Browse for a layer set (.xml) file.", &_appConfig->_hoverTimer);
 		ImGui::TableNextColumn();
-		_saveXMLOpen = ImGui::ImageButton("##save", *_saveIcon, Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor);
+		_saveXMLOpen = ImGui::ImageButton("##save", (ImTextureID)_saveIcon, ImVec2(btnSize, btnSize), ImVec2(0, 0), ImVec2(1, 1),
+					ImVec4(0, 0, 0, 0), btnColor);
 		ToolTip("Save", "Save the current layer set.", &_appConfig->_hoverTimer);
 		ImGui::TableNextColumn();
-		_saveAsXMLOpen = ImGui::ImageButton("##saveAs", *_saveAsIcon, Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor);
+		_saveAsXMLOpen = ImGui::ImageButton("##saveAs", (ImTextureID)_saveAsIcon, ImVec2(btnSize, btnSize), ImVec2(0, 0), ImVec2(1, 1),
+					ImVec4(0, 0, 0, 0), btnColor);
 		ToolTip("Save As", "Save the current layer set with a new name.", &_appConfig->_hoverTimer);
 		ImGui::TableNextColumn();
-		_makePortableOpen = ImGui::ImageButton("##makePortable", *_makePortableIcon, Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor);
+		_makePortableOpen = ImGui::ImageButton("##makePortable", (ImTextureID)_makePortableIcon, ImVec2(btnSize, btnSize), ImVec2(0, 0), ImVec2(1, 1),
+					ImVec4(0, 0, 0, 0), btnColor);
 		ToolTip("Make Portable", "Save a version of this layer set with\nfile paths relative to RahiTuber", &_appConfig->_hoverTimer);
 		ImGui::TableNextColumn();
-		_reloadXMLOpen = ImGui::ImageButton("##reload", *_reloadIcon, Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor);
+		_reloadXMLOpen = ImGui::ImageButton("##reload", (ImTextureID)_reloadIcon, ImVec2(btnSize, btnSize), ImVec2(0, 0), ImVec2(1, 1),
+					ImVec4(0, 0, 0, 0), btnColor);
 		ToolTip("Reload", "Reload the specified layer set.\n(discards unsaved changes!)", &_appConfig->_hoverTimer);
 
 		ImGui::TableNextColumn();
@@ -818,10 +824,12 @@ void LayerManager::DrawButtonsLayerSetUI()
 		ImGui::Text("|");
 
 		ImGui::TableNextColumn();
-		_newLayerOpen = ImGui::ImageButton("##newLayer", *_newLayerIcon, Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor);
+		_newLayerOpen = ImGui::ImageButton("##newLayer", (ImTextureID)_newLayerIcon, ImVec2(btnSize, btnSize), ImVec2(0, 0), ImVec2(1, 1),
+					ImVec4(0, 0, 0, 0), btnColor);
 		ToolTip("Add Layer", "Add a new Layer to the top of the list.", &_appConfig->_hoverTimer);
 		ImGui::TableNextColumn();
-		_newFolderOpen = ImGui::ImageButton("##newFolder", *_newFolderIcon, Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor);
+		_newFolderOpen = ImGui::ImageButton("##newFolder", (ImTextureID)_newFolderIcon, ImVec2(btnSize, btnSize), ImVec2(0, 0), ImVec2(1, 1),
+					ImVec4(0, 0, 0, 0), btnColor);
 		ToolTip("Add Folder", "Add a new Folder to the top of the list.", &_appConfig->_hoverTimer);
 
 		ImGui::TableNextColumn();
@@ -829,7 +837,8 @@ void LayerManager::DrawButtonsLayerSetUI()
 		ImGui::Text("|");
 
 		ImGui::TableNextColumn();
-		_editStatesOpen = ImGui::ImageButton("##states", *_statesIcon, Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor);
+		_editStatesOpen = ImGui::ImageButton("##states", (ImTextureID)_statesIcon, ImVec2(btnSize, btnSize), ImVec2(0, 0), ImVec2(1, 1),
+					ImVec4(0, 0, 0, 0), btnColor);
 		ToolTip("States", "Configure the States for this Layer Set.", &_appConfig->_hoverTimer);
 
 		ImGui::EndTable();
@@ -1050,13 +1059,14 @@ void LayerManager::DrawCanvasPresetGUI()
 
 	if (ImGui::BeginTable("PresetsTable", 5, ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_NoPadInnerX))
 	{
-		sf::Color btnColor = toSDLColor(ImGui::GetStyleColorVec4(ImGuiCol_Text));
+		ImVec4 btnColor = ImGui::GetStyleColorVec4(ImGuiCol_Text);
 		float btnSize = ImGui::GetFrameHeight() - 2;
 		ImGui::TableNextColumn();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, { 1, 1 });
 
-		if (ImGui::ImageButton("##NewPreset", *_plusIcon, Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor))
+		if (ImGui::ImageButton("##NewPreset", (ImTextureID)_plusIcon, ImVec2(btnSize, btnSize), ImVec2(0, 0), ImVec2(1, 1),
+					ImVec4(0, 0, 0, 0), btnColor))
 		{
 			_globalPresets.push_back(GlobalPreset());
 			_currentGlobalPreset = _globalPresets.size() - 1;
@@ -1071,7 +1081,8 @@ void LayerManager::DrawCanvasPresetGUI()
 		ImGui::TableNextColumn();
 		//ImGui::SameLine(btnSize*0.6);
 
-		if (ImGui::ImageButton("##RenamePreset", *_editIcon, Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor))
+		if (ImGui::ImageButton("##RenamePreset", (ImTextureID)_editIcon, ImVec2(btnSize, btnSize), ImVec2(0, 0), ImVec2(1, 1),
+					ImVec4(0, 0, 0, 0), btnColor))
 		{
 			if (_currentGlobalPreset != -1 && _currentGlobalPreset < _globalPresets.size())
 			{
@@ -1084,7 +1095,8 @@ void LayerManager::DrawCanvasPresetGUI()
 		ImGui::TableNextColumn();
 		//ImGui::SameLine(btnSize * 0.6);
 
-		if (ImGui::ImageButton("##SavePreset", *_saveIcon, Vector2f(btnSize, btnSize), sf::Color::Transparent, btnColor))
+		if (ImGui::ImageButton("##SavePreset", (ImTextureID)_saveIcon, ImVec2(btnSize, btnSize), ImVec2(0, 0), ImVec2(1, 1),
+					ImVec4(0, 0, 0, 0), btnColor))
 		{
 			if (_currentGlobalPreset != -1 && _currentGlobalPreset < _globalPresets.size())
 			{
@@ -1100,7 +1112,8 @@ void LayerManager::DrawCanvasPresetGUI()
 		//ImGui::SameLine(btnSize * 0.6);
 
 		ImVec4 delCol = PushDeleteStyle();
-		if (ImGui::ImageButton("##DeletePreset", *_delIcon, Vector2f(btnSize, btnSize), sf::Color::Transparent, toSDLColor(delCol)))
+		if (ImGui::ImageButton("##DeletePreset", (ImTextureID)_delIcon, ImVec2(btnSize, btnSize), ImVec2(0, 0), ImVec2(1, 1),
+					ImVec4(0, 0, 0, 0), delCol))
 		{
 			if (_currentGlobalPreset != -1 && _currentGlobalPreset < _globalPresets.size())
 				_globalPresets.erase(_globalPresets.begin() + _currentGlobalPreset);
@@ -2154,9 +2167,9 @@ bool LayerManager::SaveLayers(const std::string& settingsFileName, bool makePort
 
 		thisHotkey->SetAttribute("name", stateInfo._name.c_str());
 
-		if (stateInfo._key != sf::Keyboard::Unknown)
+		if (stateInfo._key != SDLK_UNKNOWN)
 			thisHotkey->SetAttribute("key", (int)stateInfo._key);
-		if (stateInfo._scancode != sf::Keyboard::Scan::Unknown)
+		if (stateInfo._scancode != SDL_SCANCODE_UNKNOWN)
 			thisHotkey->SetAttribute("scancode", (int)stateInfo._scancode);
 
 		thisHotkey->SetAttribute("ctrl", stateInfo._ctrl);
@@ -2617,11 +2630,11 @@ bool LayerManager::LoadLayers(const std::string& settingsFileName)
 
 				int key = -1;
 				thisHotkey->QueryAttribute("key", &key);
-				hkey._key = (sf::Keyboard::Key)key;
+				hkey._key = (SDL_Keycode)key;
 
 				key = -1;
 				thisHotkey->QueryAttribute("scancode", &key);
-				hkey._scancode = (sf::Keyboard::Scan::Scancode)key;
+				hkey._scancode = (SDL_Scancode)key;
 
 				thisHotkey->QueryAttribute("ctrl", &hkey._ctrl);
 				thisHotkey->QueryAttribute("shift", &hkey._shift);
@@ -2746,27 +2759,27 @@ void LayerManager::LayerInfo::SetUnloadingTimer(int timer)
 	_screamSprite->UnloadIfUnused(ltimer);
 }
 
-void LayerManager::HandleHotkey(const sf::Event& evt, bool keyDown)
+void LayerManager::HandleHotkey(const SDL_Event& evt, bool keyDown)
 {
 	for (auto& l : _layers)
 		if (l._renamePopupOpen)
 			return;
 
-	sf::Keyboard::Key key = evt.key.code;
-	sf::Keyboard::Scan::Scancode scancode = evt.key.scancode;
-	bool ctrl = evt.key.control;
-	bool shift = evt.key.shift;
-	bool alt = evt.key.alt;
-	int mButton = (int)evt.mouseButton.button;
+	SDL_Keycode key = evt.key.key;
+	SDL_Scancode scancode = evt.key.scancode;
+	bool ctrl = !!(evt.key.mod & SDL_KMOD_CTRL);
+	bool shift = !!(evt.key.mod & SDL_KMOD_SHIFT);
+	bool alt = !!(evt.key.mod & SDL_KMOD_ALT);
+	int mButton = (int)evt.button.button;
 
-	auto axis = evt.joystickMove.axis;
-	float jDir = evt.joystickMove.position;
-	int jButton = evt.joystickButton.button;
+	auto axis = evt.gaxis.axis;
+	float jDir = evt.gaxis.value;
+	int jButton = evt.gbutton.button;
 	int jPadID = -1;
-	if (evt.type == evt.JoystickMoved)
-		jPadID = evt.joystickMove.joystickId;
-	if (evt.type == evt.JoystickButtonPressed || evt.type == evt.JoystickButtonReleased)
-		jPadID = evt.joystickButton.joystickId;
+	if (evt.type == SDL_EVENT_GAMEPAD_AXIS_MOTION)
+		jPadID = evt.gaxis.which;
+	if (evt.type == SDL_EVENT_GAMEPAD_BUTTON_DOWN || evt.type == SDL_EVENT_GAMEPAD_BUTTON_UP)
+		jPadID = evt.gbutton.which;
 
 	float talkFactor = 0;
 	if (_lastTalkMax > 0)
@@ -2793,31 +2806,31 @@ void LayerManager::HandleHotkey(const sf::Event& evt, bool keyDown)
 		float timeout = 0.2;
 
 		bool match = false;
-		if ((evt.type == sf::Event::KeyPressed || evt.type == sf::Event::KeyReleased)
-			&& (key != sf::Keyboard::Unknown && stateInfo._key == key) || (scancode != sf::Keyboard::Scan::Unknown && stateInfo._scancode == scancode)
+		if ((evt.type == SDL_EVENT_KEY_DOWN || evt.type == SDL_EVENT_KEY_UP)
+			&& (key != SDLK_UNKNOWN && stateInfo._key == key) || (scancode != SDL_SCANCODE_UNKNOWN && stateInfo._scancode == scancode)
 			&& stateInfo._ctrl == ctrl && stateInfo._shift == shift && stateInfo._alt == alt)
 			match = true;
-		else if (evt.type == sf::Event::JoystickButtonPressed && stateInfo._jButton == jButton && stateInfo._jPadID == jPadID)
+		else if (evt.type == SDL_EVENT_GAMEPAD_BUTTON_DOWN && stateInfo._jButton == jButton && stateInfo._jPadID == jPadID)
 		{
 			match = true;
 			keyDown = true;
 		}
-		else if (evt.type == sf::Event::JoystickButtonReleased && stateInfo._jButton == jButton && stateInfo._jPadID == jPadID)
+		else if (evt.type == SDL_EVENT_GAMEPAD_BUTTON_UP && stateInfo._jButton == jButton && stateInfo._jPadID == jPadID)
 		{
 			match = true;
 			keyDown = false;
 		}
-		else if (ImGui::IsAnyItemHovered() == false && evt.type == sf::Event::MouseButtonPressed && stateInfo._mouseButton == mButton && stateInfo._mouseButton != -1)
+		else if (ImGui::IsAnyItemHovered() == false && evt.type == SDL_EVENT_MOUSE_BUTTON_DOWN && stateInfo._mouseButton == mButton && stateInfo._mouseButton != -1)
 		{
 			match = true;
 			keyDown = true;
 		}
-		else if (evt.type == sf::Event::MouseButtonReleased && stateInfo._mouseButton == mButton && stateInfo._mouseButton != -1)
+		else if (evt.type == SDL_EVENT_MOUSE_BUTTON_UP && stateInfo._mouseButton == mButton && stateInfo._mouseButton != -1)
 		{
 			match = true;
 			keyDown = false;
 		}
-		else if (_statesIgnoreStick == false && evt.type == sf::Event::JoystickMoved && stateInfo._axisWasTriggered == false && stateInfo._jAxis == (int)axis && stateInfo._jPadID == jPadID)
+		else if (_statesIgnoreStick == false && evt.type == SDL_EVENT_JOYSTICK_AXIS_MOTION && stateInfo._axisWasTriggered == false && stateInfo._jAxis == (int)axis && stateInfo._jPadID == jPadID)
 		{
 			if (keyDown && std::signbit(stateInfo._jDir) == std::signbit(jDir))
 				match = true;
@@ -2833,7 +2846,7 @@ void LayerManager::HandleHotkey(const sf::Event& evt, bool keyDown)
 
 		if (match && stateInfo._timer.getElapsedTime().asSeconds() > timeout)
 		{
-			if (evt.type == sf::Event::JoystickMoved)
+			if (evt.type == SDL_EVENT_JOYSTICK_AXIS_MOTION)
 				stateInfo._axisWasTriggered = true;
 
 			if (stateInfo._active && ((stateInfo._activeType == StatesInfo::Toggle && keyDown) || (stateInfo._activeType == StatesInfo::Held && !keyDown)))
@@ -2898,7 +2911,7 @@ void LayerManager::HandleHotkey(const sf::Event& evt, bool keyDown)
 		}
 		else
 		{
-			if (evt.type == sf::Event::JoystickMoved)
+			if (evt.type == SDL_EVENT_JOYSTICK_AXIS_MOTION)
 				stateInfo._axisWasTriggered = false;
 		}
 	}
@@ -2922,9 +2935,18 @@ void LayerManager::CheckHotkeys()
 		talkFactor = pow(talkFactor, 0.5);
 	}
 
-	bool ctrl = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::RControl);
-	bool alt = sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) || sf::Keyboard::isKeyPressed(sf::Keyboard::RAlt);
-	bool shift = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift);
+	int numKeys;
+	const bool *keysDown = SDL_GetKeyboardState(&numKeys);
+	bool ctrl = false;
+	bool alt = false;
+	bool shift = false;
+
+	if(keysDown && numKeys >= SDL_SCANCODE_RALT)
+	{
+		ctrl = keysDown[SDL_SCANCODE_LCTRL] || keysDown[SDL_SCANCODE_RCTRL];
+		alt = keysDown[SDL_SCANCODE_LALT] || keysDown[SDL_SCANCODE_RALT];
+		shift= keysDown[SDL_SCANCODE_LSHIFT] || keysDown[SDL_SCANCODE_RSHIFT];
+	}
 
 	for (int h = 0; h < _states.size(); h++)
 	{
@@ -3004,11 +3026,13 @@ void LayerManager::CheckHotkeys()
 		if (!canTrigger)
 			continue;
 
-		bool codePressed = stateInfo._key != -1 && sf::Keyboard::isKeyPressed(stateInfo._key);
-		bool scanPressed = stateInfo._scancode != -1 && sf::Keyboard::isKeyPressed(stateInfo._scancode);
+		int numKeys;
+		const bool *keysDown = SDL_GetKeyboardState(&numKeys);
+		bool scanPressed = stateInfo._scancode != -1 && keysDown && numKeys >= stateInfo._scancode && keysDown[stateInfo._scancode];
 
-		if ((codePressed || scanPressed)
-			&& stateInfo._ctrl == ctrl && stateInfo._shift == shift && stateInfo._alt == alt)
+		SDL_MouseButtonFlags mouseButtons = SDL_GetMouseState(nullptr, nullptr);
+
+		if (scanPressed && stateInfo._ctrl == ctrl && stateInfo._shift == shift && stateInfo._alt == alt)
 		{
 			if (stateInfo._wasTriggered == false)
 				changed = true;
@@ -3020,7 +3044,7 @@ void LayerManager::CheckHotkeys()
 				changed = true;
 			keyDown = true;
 		}
-		else if (stateInfo._mouseButton != -1 && sf::Mouse::isButtonPressed((sf::Mouse::Button)stateInfo._mouseButton))
+		else if (stateInfo._mouseButton != -1 && !!(mouseButtons & stateInfo._mouseButton))
 		{
 			if (ImGui::IsAnyItemHovered() == false)
 			{
@@ -3031,7 +3055,7 @@ void LayerManager::CheckHotkeys()
 		}
 		else if (stateInfo._jPadID != -1 && _statesIgnoreStick == false && stateInfo._jAxis != -1)
 		{
-			float jDir = GamePad::getAxisPosition(stateInfo._jPadID, (sf::Joystick::Axis)stateInfo._jAxis);
+			float jDir = GamePad::getAxisPosition(stateInfo._jPadID, (SDL_GamepadAxis)stateInfo._jAxis);
 			if (Abs(jDir) > 30 && std::signbit(jDir) == std::signbit(stateInfo._jDir))
 			{
 				if (stateInfo._wasTriggered == false)
@@ -3202,7 +3226,6 @@ void LayerManager::DrawStatesGUI()
 	{
 
 		ImVec4 col = ImGui::GetStyleColorVec4(ImGuiCol_Text);
-		sf::Color btnColor = { sf::Uint8(255 * col.x), sf::Uint8(255 * col.y), sf::Uint8(255 * col.z) };
 
 		ImGui::Columns(2, 0, false);
 		ImGui::Checkbox("States pass through", &_statesPassThrough);
@@ -3242,7 +3265,7 @@ void LayerManager::DrawStatesGUI()
 			else if (state._key != sf::Keyboard::Unknown)
 				keyName = g_key_names[state._key];
 
-			bool noKey = state._key == sf::Keyboard::Unknown && state._scancode == sf::Keyboard::Scan::Unknown;
+			bool noKey = state._key == SDLK_UNKNOWN && state._scancode == SDL_SCANCODE_UNKNOWN;
 
 			if (noKey)
 			{
@@ -3251,7 +3274,7 @@ void LayerManager::DrawStatesGUI()
 				else if (state._jButton != -1)
 					keyName = "Joystick Btn " + std::to_string(state._jButton);
 				else if (state._jDir != 0.f && state._jAxis != -1)
-					keyName = "Joystick Axis " + g_axis_names[(sf::Joystick::Axis)state._jAxis] + ((state._jDir > 0) ? "+" : "-");
+					keyName = "Joystick Axis " + SDL_GetGamepadStringForAxis[(SDL_GamepadAxis)state._jAxis] + ((state._jDir > 0) ? "+" : "-");
 				else if (state._mouseButton != -1)
 					keyName = "Mouse Btn " + std::to_string(state._mouseButton);
 				else if (state._schedule)
@@ -3331,13 +3354,13 @@ void LayerManager::DrawStatesGUI()
 					ImGui::PushID("recordKeyBtn"); {
 						if (ImGui::Button(btnName.c_str(), { style.ItemSpacing.x * 43,style.ItemSpacing.x * 12 }) && !_waitingForHotkey)
 						{
-							_pendingKey = sf::Keyboard::Unknown;
-							_pendingKeyScan = sf::Keyboard::Scan::Unknown;
+							_pendingKey = SDLK_UNKNOWN;
+							_pendingKeyScan = SDL_SCANCODE_UNKNOWN;
 							_pendingCtrl = false;
 							_pendingShift = false;
 							_pendingAlt = false;
 
-							_pendingJAxis = sf::Joystick::Axis::X;
+							_pendingJAxis = SDL_GAMEPAD_AXIS_LEFTX;
 							_pendingJDir = 0.f;
 							_pendingJButton = -1;
 							_pendingJPadID = -1;
@@ -3353,7 +3376,7 @@ void LayerManager::DrawStatesGUI()
 						{
 							state._jDir = 0.f;
 							state._jButton = -1;
-							state._key = sf::Keyboard::Unknown;
+							state._key = SDLK_UNKNOWN;
 							state._jPadID = -1;
 
 							state._ctrl = false;
@@ -3378,8 +3401,8 @@ void LayerManager::DrawStatesGUI()
 						//reset them all first
 						state._jDir = 0.f;
 						state._jButton = -1;
-						state._key = sf::Keyboard::Unknown;
-						state._scancode = sf::Keyboard::Scan::Unknown;
+						state._key = SDLK_UNKNOWN;
+						state._scancode = SDL_SCANCODE_UNKNOWN;
 						state._jAxis = -1;
 						state._jPadID = -1;
 						state._mouseButton = -1;
@@ -3390,12 +3413,12 @@ void LayerManager::DrawStatesGUI()
 							state._mouseButton = _pendingMouseButton;
 							set = true;
 						}
-						if (_pendingKeyScan != sf::Keyboard::Scan::Unknown)
+						if (_pendingKeyScan != SDL_SCANCODE_UNKNOWN)
 						{
 							state._scancode = _pendingKeyScan;
 							set = true;
 						}
-						else if (_pendingKey != sf::Keyboard::Unknown)
+						else if (_pendingKey != SDLK_UNKNOWN)
 						{
 							state._key = _pendingKey;
 							set = true;
@@ -3641,7 +3664,8 @@ void LayerManager::DrawStatesGUI()
 
 				ImGui::SetCursorPos(renameButtonPos);
 				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, { 1,1 });
-				if (ImGui::ImageButton("renameBtn", *_editIcon, toRTVector(btnSize), sf::Color::Transparent, btnColor))
+				if (ImGui::ImageButton("renameBtn", (ImTextureID)_editIcon, btnSize, ImVec2(0, 0), ImVec2(1, 1),
+					ImVec4(0, 0, 0, 0), col))
 				{
 					state._renaming = !state._renaming;
 				}
@@ -4440,16 +4464,19 @@ void LayerManager::LayerInfo::AddTrackingMovement(Vector2<double>& mpPos, double
 				switch (_trackingAxis)
 				{
 				case AXIS_XY:
-					axisPos.x = 0.01f * GamePad::getAxisPosition(_trackingJoystick, sf::Joystick::Axis::X);
-					axisPos.y = 0.01f * GamePad::getAxisPosition(_trackingJoystick, sf::Joystick::Axis::Y);
+					axisPos.x = 0.01f * GamePad::getAxisPosition(_trackingJoystick, SDL_GAMEPAD_AXIS_LEFTX);
+					axisPos.y = 0.01f * GamePad::getAxisPosition(_trackingJoystick, SDL_GAMEPAD_AXIS_LEFTY);
 					break;
 				case AXIS_UV:
-					axisPos.x = 0.01f * GamePad::getAxisPosition(_trackingJoystick, sf::Joystick::Axis::U);
-					axisPos.y = 0.01f * GamePad::getAxisPosition(_trackingJoystick, sf::Joystick::Axis::V);
+					axisPos.x = 0.01f * GamePad::getAxisPosition(_trackingJoystick, SDL_GAMEPAD_AXIS_RIGHTX);
+					axisPos.y = 0.01f * GamePad::getAxisPosition(_trackingJoystick, SDL_GAMEPAD_AXIS_RIGHTY);
 					break;
+// SDL_FIXME
+#if 0
 				case AXIS_POV:
 					axisPos.x = 0.01f * GamePad::getAxisPosition(_trackingJoystick, sf::Joystick::Axis::PovX);
 					axisPos.y = -0.01f * GamePad::getAxisPosition(_trackingJoystick, sf::Joystick::Axis::PovY);
+#endif
 					break;
 				}
 
@@ -4492,8 +4519,7 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 
 	float UIUnit = ImGui::GetFrameHeight();
 
-	ImVec4 col = style.Colors[ImGuiCol_Text];
-	sf::Color btnColor = toSDLColor(col);
+	ImVec4 btnColor = style.Colors[ImGuiCol_Text];
 
 	bool allowContinue = true;
 
@@ -4528,14 +4554,14 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 
 		name += "##0";
 
-		Vector2f headerBtnSize(UIUnit - 2, UIUnit - 2);
+		ImVec2 headerBtnSize = { UIUnit - 2, UIUnit - 2 };
 		ImVec2 headerButtonsPos = { ImGui::GetWindowWidth() - UIUnit * 7, ImGui::GetCursorPosY() };
 
 		float indentSize = 8 * uiScale;
 
-		_lastHeaderScreenPos = toRTVector(ImGui::GetCursorScreenPos());
-		_lastHeaderPos = toRTVector(ImGui::GetCursorPos());
-		_lastHeaderSize = Vector2f(ImGui::GetContentRegionAvail().x - 8 * uiScale, ImGui::GetFrameHeight());
+		_lastHeaderScreenPos = ImGui::GetCursorScreenPos();
+		_lastHeaderPos = ImGui::GetCursorPos();
+		_lastHeaderSize = { ImGui::GetContentRegionAvail().x - 8 * uiScale, ImGui::GetFrameHeight() };
 
 		if (_isFolder)
 		{
@@ -4600,7 +4626,8 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 						ImageBrowsePreviewBtn(_importIdleOpen, "idleimgbtn", imgBtnWidth, _idleImagePath, _idleSprite.get());
 
 						ImGui::SameLine();
-						_spriteIdleOpen |= ImGui::ImageButton("idleanimbtn", *_animIcon, Vector2f(animBtnWidth, animBtnWidth), sf::Color::Transparent, btnColor);
+						_spriteIdleOpen |= ImGui::ImageButton("idleanimbtn", (ImTextureID)_animIcon, ImVec2(animBtnWidth, animBtnWidth), ImVec2(0, 0), ImVec2(1, 1),
+							ImVec4(0, 0, 0, 0), btnColor);
 						ToolTip("Animation settings", &_parent->_appConfig->_hoverTimer);
 						AnimPopup(*_idleSprite, _spriteIdleOpen, _oldSpriteIdleOpen);
 
@@ -4637,7 +4664,8 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 
 							ImGui::SameLine();
 							ImGui::PushID("talkanimbtn"); {
-								_spriteTalkOpen |= ImGui::ImageButton("talkanimbtn", *_animIcon, Vector2f(animBtnWidth, animBtnWidth), sf::Color::Transparent, btnColor);
+								_spriteTalkOpen |= ImGui::ImageButton("talkanimbtn", (ImTextureID)_animIcon, ImVec2(animBtnWidth, animBtnWidth), ImVec2(0, 0), ImVec2(1, 1),
+									ImVec4(0, 0, 0, 0), btnColor);
 								ToolTip("Animation Settings", &_parent->_appConfig->_hoverTimer);
 								AnimPopup(*_talkSprite, _spriteTalkOpen, _oldSpriteTalkOpen);
 							}ImGui::PopID();
@@ -4678,7 +4706,8 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 							ImGui::SameLine();
 							auto tintPos = ImGui::GetCursorPos();
 							ImGui::PushID("blinkanimbtn"); {
-								_spriteBlinkOpen |= ImGui::ImageButton("blinkanimbtn", *_animIcon, Vector2f(animBtnWidth, animBtnWidth), sf::Color::Transparent, btnColor);
+								_spriteBlinkOpen |= ImGui::ImageButton("blinkanimbtn", (ImTextureID)_animIcon, ImVec2(animBtnWidth, animBtnWidth), ImVec2(0, 0), ImVec2(1, 1),
+									ImVec4(0, 0, 0, 0), btnColor);
 								tintPos.y += ImGui::GetItemRectSize().y;
 								ToolTip("Animation Settings", &_parent->_appConfig->_hoverTimer);
 								AnimPopup(*_blinkSprite, _spriteBlinkOpen, _oldSpriteBlinkOpen);
@@ -4717,7 +4746,8 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 								ImGui::SameLine();
 								auto tintPos = ImGui::GetCursorPos();
 								ImGui::PushID("talkblinkanimbtn"); {
-									_spriteTalkBlinkOpen |= ImGui::ImageButton("talkblinkanimbtn", *_animIcon, Vector2f(animBtnWidth, animBtnWidth), sf::Color::Transparent, btnColor);
+									_spriteTalkBlinkOpen |= ImGui::ImageButton("talkblinkanimbtn", (ImTextureID)_animIcon, ImVec2(animBtnWidth, animBtnWidth), ImVec2(0, 0), ImVec2(1, 1),
+										ImVec4(0, 0, 0, 0), btnColor);
 									tintPos.y += ImGui::GetItemRectSize().y;
 									ToolTip("Animation Settings", &_parent->_appConfig->_hoverTimer);
 									AnimPopup(*_talkBlinkSprite, _spriteTalkBlinkOpen, _oldSpriteTalkBlinkOpen);
@@ -4783,7 +4813,7 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 						FloatSliderDrag("Alpha Cutoff", &_alphaClip, 0.0, 1.0, "%.3f", ImGuiSliderFlags_ClampOnInput, _parent->_uiConfig->_numberEditType);
 						ToolTip("Define the minimum alpha (transparency) needed for visibility.\nValues below this will be fully transparent.\nUseful for removing unwanted soft edges from the Linear filter.\nSet to 0.0 to use the default from Advanced Settings.", &_parent->_appConfig->_hoverTimer);
 
-						sf::BlendMode oldBlendMode = _blendMode;
+						SDL_BlendMode oldBlendMode = _blendMode;
 						std::string bmName = "";
 						for (auto& bm : g_blendmodes)
 							if (bm.second == oldBlendMode)
@@ -4905,7 +4935,8 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 
 						ImGui::SameLine();
 						ImGui::PushID("screamanimbtn"); {
-							_spriteScreamOpen |= ImGui::ImageButton("screamanimbtn", *_animIcon, Vector2f(animBtnWidth, animBtnWidth), sf::Color::Transparent, btnColor);
+							_spriteScreamOpen |= ImGui::ImageButton("screamanimbtn", (ImTextureID)_animIcon, ImVec2(animBtnWidth, animBtnWidth), ImVec2(0, 0), ImVec2(1, 1),
+								ImVec4(0, 0, 0, 0), btnColor);
 							ToolTip("Animation Settings", &_parent->_appConfig->_hoverTimer);
 							AnimPopup(*_screamSprite, _spriteScreamOpen, _oldSpriteScreamOpen);
 						}ImGui::PopID();//screamanimbtn
@@ -5409,7 +5440,8 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 					ImGui::SetCursorPos(subHeaderBtnPos);
 					ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, { 0,0 });
 					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, { 1,1 });
-					if (ImGui::ImageButton("allowIndivMotion", _allowIndividualMotion ? *_lockOpenIcon : *_lockClosedIcon, headerBtnSize, sf::Color::Transparent, btnColor))
+					if (ImGui::ImageButton("allowIndivMotion", _allowIndividualMotion ? (ImTextureID)_lockOpenIcon : (ImTextureID)_lockClosedIcon, headerBtnSize, ImVec2(0, 0), ImVec2(1, 1),
+						ImVec4(0, 0, 0, 0), btnColor))
 					{
 						_allowIndividualMotion = !_allowIndividualMotion;
 					}
@@ -5716,7 +5748,8 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 			pinPos.x -= UIUnit;
 			ImGui::SetCursorPos(pinPos);
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-			if (ImGui::ImageButton("pinloaded", _pinLoaded ? *_pinIcon : *_pinOffIcon, headerBtnSize, sf::Color::Transparent, btnColor))
+			if (ImGui::ImageButton("pinloaded", _pinLoaded ? (ImTextureID)_pinIcon : (ImTextureID)_pinOffIcon, headerBtnSize, ImVec2(0, 0), ImVec2(1, 1),
+				ImVec4(0, 0, 0, 0), btnColor))
 			{
 				_pinLoaded = !_pinLoaded;
 
@@ -5728,7 +5761,8 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 		
 		ImGui::SetCursorPos(headerButtonsPos);
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0.5));
-		if (ImGui::ImageButton("visible", _visible ? *_eyeOpenIcon : *_eyeClosedIcon, headerBtnSize, sf::Color::Transparent, btnColor))
+		if (ImGui::ImageButton("visible", _visible ? (ImTextureID)_eyeOpenIcon : (ImTextureID)_eyeClosedIcon, headerBtnSize, ImVec2(0, 0), ImVec2(1, 1),
+			ImVec4(0, 0, 0, 0), btnColor))
 		{
 			_visible = !_visible;
 
@@ -5761,17 +5795,20 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0.25));
 		ImGui::SameLine();
-		if (ImGui::ImageButton("upbtn", *_upIcon, headerBtnSize, sf::Color::Transparent, btnColor))
+		if (ImGui::ImageButton("upbtn", (ImTextureID)_upIcon, headerBtnSize, ImVec2(0, 0), ImVec2(1, 1),
+			ImVec4(0, 0, 0, 0), btnColor))
 			_parent->MoveLayerUp(this);
 		ToolTip("Move the layer up", &_parent->_appConfig->_hoverTimer);
 
 		ImGui::SameLine();
-		if (ImGui::ImageButton("dnbtn", *_dnIcon, headerBtnSize, sf::Color::Transparent, btnColor))
+		if (ImGui::ImageButton("dnbtn", (ImTextureID)_dnIcon, headerBtnSize, ImVec2(0, 0), ImVec2(1, 1),
+			ImVec4(0, 0, 0, 0), btnColor))
 			_parent->MoveLayerDown(this);
 		ToolTip("Move the layer down", &_parent->_appConfig->_hoverTimer);
 
 		ImGui::SameLine();
-		if (ImGui::ImageButton("renamebtn", *_editIcon, headerBtnSize, sf::Color::Transparent, btnColor))
+		if (ImGui::ImageButton("renamebtn", (ImTextureID)_editIcon, headerBtnSize, ImVec2(0, 0), ImVec2(1, 1),
+			ImVec4(0, 0, 0, 0), btnColor))
 		{
 			_renamingString = _name;
 			_renamePopupOpen = true;
@@ -5818,8 +5855,8 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 			{
 				float fp = ImGui::GetStyle().FramePadding.y;
 				ImVec2 btnSize = { ImGui::GetFrameHeight(), ImGui::GetFrameHeight() };
-				Vector2f imgBtnSize = { ImGui::GetFrameHeight() - fp * 2,ImGui::GetFrameHeight() - fp * 2 };
-				auto textCol = toSDLColor(ImGui::GetStyleColorVec4(ImGuiCol_Text));
+				ImVec2 imgBtnSize = { ImGui::GetFrameHeight() - fp * 2,ImGui::GetFrameHeight() - fp * 2 };
+				auto textCol = ImGui::GetStyleColorVec4(ImGuiCol_Text);
 
 				ImGui::TableNextColumn();
 
@@ -5828,7 +5865,7 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 					_layerColor = { 0, 0, 0, 0 };
 
 				ImGui::SetCursorPos(colPos + ImVec2(fp, fp));
-				ImGui::Image(*_delIcon, imgBtnSize, textCol);
+				ImGui::ImageWithBg((ImTextureID)_delIcon, imgBtnSize, ImVec2(0, 0), ImVec2(1, 1), ImVec4(0, 0, 0, 0), textCol);
 
 
 				ImGui::TableNextColumn();
@@ -5837,7 +5874,7 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 					_layerColor.w = 1.f;
 
 				ImGui::SetCursorPos(colPos + ImVec2(fp, fp));
-				ImGui::Image(*_editIcon, imgBtnSize, textCol);
+				ImGui::ImageWithBg((ImTextureID)_editIcon, imgBtnSize, ImVec2(0, 0), ImVec2(1, 1), ImVec4(0, 0, 0, 0), textCol);
 
 				ImGui::TableNextColumn();
 				if (ImGui::ColorButton("red", { 0.5, 0.0, 0.1, 1 }, ImGuiColorEditFlags_NoTooltip, btnSize))
@@ -5881,7 +5918,8 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, { 0.8,0.4,0.4,1.0 });
 		ImGui::PushStyleColor(ImGuiCol_Text, { 255 / 255,200 / 255,170 / 255, 1 });
 		ImGui::PushID("deleteBtn"); {
-			if (ImGui::ImageButton("delbtn", *_delIcon, headerBtnSize, sf::Color::Transparent, sf::Color(255, 200, 170)))
+			if (ImGui::ImageButton("delbtn", (ImTextureID)_delIcon, headerBtnSize, ImVec2(0,0), ImVec2(1,1),
+				ImVec4(0, 0, 0, 0), ImVec4(255.f / 255.f, 200.f / 255.f, 170.f / 255.f, 1.f)))
 			{
 				allowContinue = false;
 				_parent->RemoveLayer(this);
@@ -5959,8 +5997,8 @@ bool LayerManager::LayerInfo::DrawGUI(ImGuiStyle& style, int layerID)
 void LayerManager::LayerInfo::ImageBrowsePreviewBtn(bool& openFlag, const char* btnname, float imgBtnWidth, std::string& path, SpriteSheet* sprite)
 {
 	bool emptyTex = !sprite->HasTexture();
-	sf::Color btnCol = emptyTex ? toSDLColor(ImGui::GetStyleColorVec4(ImGuiCol_Text)) : sf::Color::White;
-	sf::Texture* btnIcon = emptyTex ? _emptyIcon : sprite->getTexture();
+	ImVec4 btnCol = emptyTex ? ImGui::GetStyleColorVec4(ImGuiCol_Text) : ImVec4(1, 1, 1, 1);
+	SDL_Texture* btnIcon = emptyTex ? _emptyIcon : sprite->getTexture();
 
 	bool reloading = false;
 	if (btnIcon == nullptr)
@@ -5976,7 +6014,8 @@ void LayerManager::LayerInfo::ImageBrowsePreviewBtn(bool& openFlag, const char* 
 		fileBrowserIdle.SetStartingDir(fileBrowserIdle.GetLastChosenDir());
 
 	ImGui::BeginDisabled(reloading);
-	openFlag = ImGui::ImageButton(btnname, *btnIcon, { imgBtnWidth,imgBtnWidth }, sf::Color::Transparent, btnCol);
+	openFlag = ImGui::ImageButton(btnname, (ImTextureID)btnIcon, { imgBtnWidth,imgBtnWidth }, ImVec2(0, 0), ImVec2(1, 1),
+		ImVec4(0, 0, 0, 0), btnCol);
 	ToolTip("Browse for an image file", &_parent->_appConfig->_hoverTimer);
 	if (openFlag && sprite->HasTexture())
 		fileBrowserIdle.SetStartingDir(path);
@@ -5990,17 +6029,17 @@ void LayerManager::LayerInfo::ImageBrowsePreviewBtn(bool& openFlag, const char* 
 
 void LayerManager::LayerInfo::DrawThresholdBar(float thresholdLevel, float thresholdTrigger, ImVec2& barPos, float uiScale, float barWidth)
 {
-	sf::Color barHighlight(60, 140, 60, 255);
-	sf::Color barBg(20, 60, 20, 255);
+	SDL_Color barHighlight{60, 140, 60, 255};
+	SDL_Color barBg{20, 60, 20, 255};
 	if (thresholdLevel < 0.001 || thresholdLevel < thresholdTrigger)
 	{
-		barHighlight = sf::Color(140, 60, 60, 255);
-		barBg = sf::Color(60, 20, 20, 255);
+		barHighlight = SDL_Color{140, 60, 60, 255};
+		barBg = SDL_Color{60, 20, 20, 255};
 	}
 
 	auto drawList = ImGui::GetWindowDrawList();
 
-	Vector2f topLeft = { barPos.x, barPos.y };
+	ImVec2 topLeft = { barPos.x, barPos.y };
 	//float barWidth = (ImGui::GetWindowWidth() - topLeft.x) - 148;
 	float barHeight = 10 * uiScale;
 	ImVec2 volumeBarTL = { topLeft.x, topLeft.y };

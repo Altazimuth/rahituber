@@ -304,9 +304,9 @@ public:
 		sf::Clock _frameTimer;
 		sf::Clock _physicsTimer;
 
-		Vector2f _lastHeaderScreenPos;
-		Vector2f _lastHeaderPos;
-		Vector2f _lastHeaderSize;
+		ImVec2 _lastHeaderScreenPos;
+		ImVec2 _lastHeaderPos;
+		ImVec2 _lastHeaderSize;
 
 		Vector2f _constantScale = { 1.f, 1.f };
 		Vector2f _constantPos = { 0,0 };
@@ -484,7 +484,7 @@ public:
 	bool PendingHotkey() { return _waitingForHotkey; }
 	void SetHotkeys(const SDL_Event& evt)
 	{
-		if (evt.type == SDL_EVENT_JOYSTICK_AXIS_MOTION && _statesIgnoreStick)
+		if (evt.type == SDL_EVENT_GAMEPAD_AXIS_MOTION && _statesIgnoreStick)
 			return;
 
 		_pendingMouseButton = -1;
@@ -515,15 +515,15 @@ public:
 		_pendingJPadID = -1;
 
 		//_pendingJStick = evt.joystickMove.joystickId;
-		if (evt.type == SDL_EVENT_JOYSTICK_AXIS_MOTION)
+		if (evt.type == SDL_EVENT_GAMEPAD_AXIS_MOTION)
 		{
-			_pendingJAxis = evt.jaxis.axis;
-			_pendingJDir = evt.jaxis.value;
-			_pendingJPadID = evt.jaxis.which;
+			_pendingJAxis = (SDL_GamepadAxis)evt.gaxis.axis;
+			_pendingJDir = evt.gaxis.value;
+			_pendingJPadID = evt.gaxis.which;
 		}
 
 		//_pendingJButtonSID = evt.joystickButton.joystickId;
-		if (evt.type == SDL_EVENT_JOYSTICK_BUTTON_DOWN)
+		if (evt.type == SDL_EVENT_GAMEPAD_BUTTON_DOWN)
 		{
 			_pendingJButton = evt.jbutton.button;
 			_pendingJPadID = evt.jbutton.which;
@@ -531,7 +531,7 @@ public:
 		else
 			_pendingJButton = -1;
 	}
-	void HandleHotkey(const sf::Event& key, bool keyDown);
+	void HandleHotkey(const SDL_Event& key, bool keyDown);
 
 	void CheckHotkeys();
 
@@ -645,7 +645,7 @@ private:
 	bool _pendingCtrl = false;
 	bool _pendingShift = false;
 	bool _pendingAlt = false;
-	sf::Joystick::Axis _pendingJAxis = sf::Joystick::Axis::X;
+	SDL_GamepadAxis _pendingJAxis = SDL_GAMEPAD_AXIS_LEFTX;
 	float _pendingJDir = 0.f;
 	int _pendingJButton = -1;
 	int _pendingJPadID = -1;

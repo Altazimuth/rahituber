@@ -2,7 +2,7 @@
 
 #include <map>
 #include <variant>
-#include "SFML/Graphics.hpp"
+//#include "SFML/Graphics.hpp"
 
 
 template <typename T>

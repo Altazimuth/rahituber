@@ -33,12 +33,11 @@ add_executable(RahiTuber_Test)
 
 target_include_directories(RahiTuber_Test PRIVATE
     ../RahiTuber
-    ../RahiTuber/imgui-sfml
     ${CMAKE_SOURCE_DIR}/Libraries/freetype/include
     ${CMAKE_SOURCE_DIR}/Libraries/imgui
     ${CMAKE_SOURCE_DIR}/Libraries/mongoose
     ${CMAKE_SOURCE_DIR}/Libraries/portaudio/include
-    ${CMAKE_SOURCE_DIR}/Libraries/SFML/include
+    ${CMAKE_SOURCE_DIR}/Libraries/SDL/include
 )
 
 if(WIN32)
@@ -72,9 +71,7 @@ target_link_libraries(RahiTuber_Test PRIVATE ${OPENGL_LIBRARY}
     imgui
     portaudio_static
     tinyxml2
-    sfml-graphics
-    sfml-window
-    sfml-system
+    SDL3::SDL3
     gtest_main
 )
 

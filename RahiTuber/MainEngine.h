@@ -9,7 +9,6 @@
 #define IMGUI_ENABLE_FREETYPE
 #include "imgui.h"
 #include "misc/freetype/imgui_freetype.h"
-#include "imgui-SFML.h"
 
 #include "imgui_internal.h"
 
@@ -1471,7 +1470,7 @@ public:
 
 		if (menuPoppedNow)
 		{
-			float scaleFactor = CheckMonitorScaleFactor(appConfig->_lastMenuPopPosition, { (sf::Uint16)(UIUnit * 25), (sf::Uint16)appConfig->_scrH + 4u });
+			float scaleFactor = CheckMonitorScaleFactor(appConfig->_lastMenuPopPosition, { (Uint16)(UIUnit * 25), (Uint16)appConfig->_scrH + 4u });
 			float scaleFactorDiff = scaleFactor / appConfig->mainWindowScaling;
 
 			appConfig->_menuWindow.create(sf::VideoMode(scaleFactorDiff * UIUnit * 25, appConfig->_scrH * scaleFactorDiff + 4), "RahiTuber - Menu", sf::Style::Default | sf::Style::Resize | sf::Style::Titlebar);
@@ -1854,7 +1853,7 @@ public:
 
 		layerMan->CheckHotkeys();
 
-		sf::Event evt;
+		SDL_Event evt;
 		while (appConfig->_window.isOpen() && appConfig->_window.pollEvent(evt))
 		{
 			if (evt.type == evt.KeyPressed || evt.type == evt.MouseButtonPressed)

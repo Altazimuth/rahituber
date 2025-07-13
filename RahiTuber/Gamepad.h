@@ -1,9 +1,7 @@
 #ifndef GAMEPAD__H__
 #define GAMEPAD__H__
 
-#include "SFML/Main.hpp"
-#include "SFML/System.hpp"
-#include "SFML/Window.hpp"
+#include <SDL3/SDL.h>
 
 #ifdef _WIN32
 	#include <Xinput.h>
@@ -20,7 +18,7 @@
 #include <memory>
 
 static const char* const g_gamepadAPINames[3] = {
-	"RawInput", "XInput", "SFML"
+	"RawInput", "XInput", "SDL"
 };
 
 static const char* const g_gamepadAPITooltips[3] = {
@@ -32,7 +30,7 @@ enum GamepadAPI {
 	GAMEPAD_API_RAWINPUT,
 	GAMEPAD_API_XINPUT,
 #endif
-	GAMEPAD_API_SFML,
+	GAMEPAD_API_SDL,
 
 	GAMEPAD_API_END
 };
@@ -75,8 +73,8 @@ public:
 				printf("RAWINPUT registration failed!");
 				//registration failed. Call GetLastError for the cause of the error.
 
-				//fallback to sfml 
-				inputAPI = GAMEPAD_API_SFML;
+				//fallback to sdl 
+				inputAPI = GAMEPAD_API_SDL;
 			}
 		}
 
@@ -149,7 +147,7 @@ public:
 		sf::Joystick::update();
 	}
 
-	float getAxisPosition(unsigned int gamepadID, sf::Joystick::Axis axis)
+	float getAxisPosition(unsigned int gamepadID, SDL_GamepadAxis axis)
 	{
 #ifdef _WIN32
 		if (inputAPI == GAMEPAD_API_XINPUT && gamepadID < 4)
@@ -160,24 +158,26 @@ public:
 			auto& xState = xStates[gamepadID];
 			switch (axis)
 			{
-			case sf::Joystick::X:
-				return (double)xState.Gamepad.sThumbLX / 32767 * 100;
+			case SDL_GAMEPAD_AXIS_LEFTX:
+				return (double)xState.Gamepad.sThumbLX / SDL_JOYSTICK_AXIS_MAX * 100;
 				break;
-			case sf::Joystick::Y:
-				return (double)xState.Gamepad.sThumbLY / 32767 * -100;
+			case SDL_GAMEPAD_AXIS_LEFTY:
+				return (double)xState.Gamepad.sThumbLY / SDL_JOYSTICK_AXIS_MAX * -100;
 				break;
-			case sf::Joystick::Z:
-				return (double)xState.Gamepad.bLeftTrigger / 255 * 100
-					+ (double)xState.Gamepad.bRightTrigger / 255 * -100;
+			case SDL_GAMEPAD_AXIS_LEFT_TRIGGER:
+				return (double)xState.Gamepad.bLeftTrigger / SDL_JOYSTICK_AXIS_MAX * 100;
 				break;
-			case sf::Joystick::R:
+			case SDL_GAMEPAD_AXIS_RIGHT_TRIGGER:
+				return (double)xState.Gamepad.bRightTrigger / SDL_JOYSTICK_AXIS_MAX * -100;
 				break;
-			case sf::Joystick::U:
-				return (double)xState.Gamepad.sThumbRX / 32767 * 100;
+			case SDL_GAMEPAD_AXIS_RIGHTX:
+				return (double)xState.Gamepad.sThumbRX / SDL_JOYSTICK_AXIS_MAX * 100;
 				break;
-			case sf::Joystick::V:
-				return (double)xState.Gamepad.sThumbRY / 32767 * -100;
+			case SDL_GAMEPAD_AXIS_RIGHTY:
+				return (double)xState.Gamepad.sThumbRY / SDL_JOYSTICK_AXIS_MAX * -100;
 				break;
+// SDL_FIXME
+#if 0
 			case sf::Joystick::PovX:
 				if (xState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT)
 					return -100;
@@ -190,6 +190,7 @@ public:
 				if (xState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP)
 					return 100;
 				break;
+#endif
 			default:
 				break;
 			}
@@ -205,24 +206,26 @@ public:
 
 				switch (axis)
 				{
-				case sf::Joystick::X:
+				case SDL_GAMEPAD_AXIS_LEFTX:
 					return myState.axes[1] * 100;
 					break;
-				case sf::Joystick::Y:
+				case SDL_GAMEPAD_AXIS_LEFTY:
 					return myState.axes[0] * 100;
 					break;
-				case sf::Joystick::Z:
+				case SDL_GAMEPAD_AXIS_LEFT_TRIGGER:
 					return myState.axes[4] * 100;
 					break;
-				case sf::Joystick::R:
+				case SDL_GAMEPAD_AXIS_RIGHT_TRIGGER:
 					return 0;					
 					break;
-				case sf::Joystick::U:
+				case SDL_GAMEPAD_AXIS_RIGHTX:
 					return myState.axes[3] * 100;
 					break;
-				case sf::Joystick::V:
+				case SDL_GAMEPAD_AXIS_RIGHTY:
 					return myState.axes[2] * 100;
 					break;
+// SDL_FIXME
+#if 0
 				case sf::Joystick::PovX:
 					if (myState.axes[5] == 2 ||
 						myState.axes[5] == 3 ||
@@ -246,11 +249,12 @@ public:
 				default:
 					break;
 				}
+#endif
 			}
 		}
 #endif
 
-		return sf::Joystick::getAxisPosition(gamepadID, axis);
+		SDL_GetGamepadAxis(SDL_GetGamepadFromID(gamepadID), axis); // SDL_FIXME: Probably unsafe
 	}
 
 	bool isButtonPressed(unsigned int gamepadID, unsigned int button)
@@ -341,7 +345,7 @@ private:
 
 		if (rawStateSFIDs.count(input->header.hDevice) == 0)
 		{
-			//find which one it matches in SFML
+			//find which one it matches in SDL
 			for (int i = 0; i < 8; i++)
 			{
 				auto ident = sf::Joystick::getIdentification(i);
@@ -422,7 +426,7 @@ private:
 
 	HWND windowHandle;
 #else
-    GamepadAPI inputAPI = GAMEPAD_API_SFML;
+    GamepadAPI inputAPI = GAMEPAD_API_SDL;
 #endif
 
 	int reConnectCountdown = 50;
@@ -454,7 +458,7 @@ public:
 		GetInstance().update();
 	}
 
-	static float getAxisPosition(unsigned int gamepadID, sf::Joystick::Axis axis)
+	static float getAxisPosition(unsigned int gamepadID, SDL_GamepadAxis axis)
 	{
 		return GetInstance().getAxisPosition(gamepadID, axis);
 	}
