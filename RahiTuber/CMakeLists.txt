@@ -25,7 +25,9 @@ target_sources(RahiTuber PRIVATE
     LayerManager.cpp
     LayerManager.h
     main.cpp
+    rttime.cpp
     rtmath.h
+    rttime.h
     SpriteSheet.cpp
     SpriteSheet.h
     TextureManager.cpp

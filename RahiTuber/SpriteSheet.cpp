@@ -2,7 +2,7 @@
 
 void SpriteSheet::Draw(sf::RenderTarget* target, const sf::RenderStates& states)
 {
-	sf::Time dt = _timer.getElapsedTime();
+	Time dt = _timer.getElapsedTime();
 
 	const float frametime = 1.0f / _fps;
 

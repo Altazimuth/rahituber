@@ -92,11 +92,11 @@ struct AppConfig
 	float _fps = 0;
 	int _fpsLimit = 60;
 
-	sf::Clock _timer;
+	Clock _timer;
 
-	sf::Clock _hoverTimer;
+	Clock _hoverTimer;
 
-	sf::Clock _runTime;
+	Clock _runTime;
 
 	std::string _lastLayerSet = u8"lastLayers";
 
@@ -181,8 +181,8 @@ struct AudioConfig
 	SAMPLE _fixedMax = 1.0;
 	bool _softMaximum = false;
 
-	sf::Clock _quietTimer;
-	sf::Clock _recordTimer;
+	Clock _quietTimer;
+	Clock _recordTimer;
 
 	bool _doFiltering = false;
 

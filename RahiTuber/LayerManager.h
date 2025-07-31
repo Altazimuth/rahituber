@@ -102,7 +102,7 @@ public:
 		float _blinkDuration = 0.2;
 		float _blinkDelay = 6.0;
 		float _blinkVariation = 4.0;
-		sf::Clock _blinkTimer;
+		Clock _blinkTimer;
 		bool _isBlinking = false;
 		float _blinkVarDelay = 0;
 
@@ -139,8 +139,8 @@ public:
 
 		float _motionX = 0;
 		float _motionY = 0;
-		sf::Clock _motionTimer;
-		sf::Clock _bounceTimer;
+		Clock _motionTimer;
+		Clock _bounceTimer;
 
 		bool _scream = false;
 		float _screamThreshold = 0.85;
@@ -238,7 +238,7 @@ public:
 
 		void CalculateInheritedMotion(Vector2<double>& motionScale, Vector2<double>& motionPos, double& motionRot, double& motionParentRot, ImVec4& motionTint, Vector2<double>& physicsPos, bool becameVisible, SpriteSheet* lastActiveSprite, float timeMult);
 
-		void DoConstantMotion(sf::Time& frameTime, Vector2<double>& mpScale, Vector2<double>& mpPos, double& mpRot);
+		void DoConstantMotion(Time& frameTime, Vector2<double>& mpScale, Vector2<double>& mpPos, double& mpRot);
 
 		void CalculateDraw(float windowHeight, float windowWidth, float talkLevel, float talkMax);
 
@@ -270,7 +270,7 @@ public:
 		float _motionDelay = 0;
 		struct MotionLinkData
 		{
-			sf::Time _frameTime;
+			Time _frameTime;
 			Vector2<double>  _scale = { 1.f, 1.f };
 			Vector2<double>  _pos = { 0,0 };
 			Vector2<double>  _physicsPos = { 0,0 };
@@ -301,8 +301,8 @@ public:
 		float _smoothTalkFactorSize = 5;
 		float _talkRunningAverage = 0.0;
 
-		sf::Clock _frameTimer;
-		sf::Clock _physicsTimer;
+		Clock _frameTimer;
+		Clock _physicsTimer;
 
 		ImVec2 _lastHeaderScreenPos;
 		ImVec2 _lastHeaderPos;
@@ -428,7 +428,7 @@ public:
 		std::string _webRequest = "";
 
 
-		sf::Clock _timer;
+		Clock _timer;
 	};
 
 	void Draw(sf::RenderTarget* target, float windowHeight, float windowWidth, float talkLevel, float talkMax);
@@ -673,7 +673,7 @@ private:
 
 	std::map<std::string, bool> _defaultLayerStates;
 	std::deque<StatesInfo*> _statesOrder;
-	sf::Clock _statesTimer;
+	Clock _statesTimer;
 	bool _statesDirty = false;
 	void DrawStatesGUI();
 
@@ -689,7 +689,7 @@ private:
 	bool _lastDragMouseDown = false;
 	int _draggedLayer = -1;
 	Vector2f _layerDragPos = { 0,0 };
-	sf::Clock _layerDragTimer;
+	Clock _layerDragTimer;
 	bool _dragActive = false;
 
 	float _maxCursorDragY = 0;

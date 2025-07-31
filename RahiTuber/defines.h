@@ -15,6 +15,7 @@ namespace fs = std::filesystem;
 #define PI 3.14159265359
 
 #include "rtmath.h"
+#include "rttime.h"
 
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
@@ -360,7 +361,7 @@ static bool runProcess(const std::string& cmd, bool wait = false) {
 #endif
 }
 
-static inline bool ToolTip(const char* title, const char* txt, sf::Clock* hoverTimer, bool forSlider = false)
+static inline bool ToolTip(const char* title, const char* txt, Clock* hoverTimer, bool forSlider = false)
 {
 
 	if (ImGui::IsItemHovered() && hoverTimer->getElapsedTime().asSeconds() > 1.0 && ImGui::BeginTooltip())
@@ -380,7 +381,7 @@ static inline bool ToolTip(const char* title, const char* txt, sf::Clock* hoverT
 	return false;
 }
 
-static inline bool ToolTip(const char* txt, sf::Clock* hoverTimer, bool forSlider = false)
+static inline bool ToolTip(const char* txt, Clock* hoverTimer, bool forSlider = false)
 {
 	return ToolTip(nullptr, txt, hoverTimer, forSlider);
 }
@@ -678,7 +679,7 @@ struct SwapButtonDef
 	int onFlag = 0;
 };
 
-inline bool SwapButtons(const char* label, const std::vector<SwapButtonDef>& options, int& flag, sf::Clock* hoverTimer, bool useLabel = true)
+inline bool SwapButtons(const char* label, const std::vector<SwapButtonDef>& options, int& flag, Clock* hoverTimer, bool useLabel = true)
 {
 	bool optionChanged = false;
 	int outerTableCols = 1;

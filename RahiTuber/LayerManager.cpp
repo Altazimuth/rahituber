@@ -3986,7 +3986,7 @@ void LayerManager::LayerInfo::CalculateInheritedMotion(Vector2<double>& motionSc
 
 		if (motionDelayNow > 0)
 		{
-			sf::Time totalParentStoredTime;
+			Time totalParentStoredTime;
 			for (auto& frame : mp->_motionLinkData)
 				totalParentStoredTime += frame._frameTime;
 
@@ -3995,8 +3995,8 @@ void LayerManager::LayerInfo::CalculateInheritedMotion(Vector2<double>& motionSc
 
 			size_t prev = 0;
 			size_t next = 0;
-			sf::Time cumulativeTime;
-			sf::Time prevCumulativeTime;
+			Time cumulativeTime;
+			Time prevCumulativeTime;
 			size_t idx = 0;
 			for (auto& frame : mp->_motionLinkData)
 			{
@@ -4175,7 +4175,7 @@ void LayerManager::LayerInfo::CalculateInheritedMotion(Vector2<double>& motionSc
 	}
 }
 
-void LayerManager::LayerInfo::DoConstantMotion(sf::Time& frameTime, Vector2<double>& mpScale, Vector2<double>& mpPos, double& mpRot)
+void LayerManager::LayerInfo::DoConstantMotion(Time& frameTime, Vector2<double>& mpScale, Vector2<double>& mpPos, double& mpRot)
 {
 	_storedConstantRot += _constantRot * frameTime.asSeconds();
 
@@ -4184,7 +4184,7 @@ void LayerManager::LayerInfo::DoConstantMotion(sf::Time& frameTime, Vector2<doub
 
 void LayerManager::LayerInfo::CalculateDraw(float windowHeight, float windowWidth, float talkLevel, float talkMax)
 {
-	sf::Time frameTime = _frameTimer.restart();
+	Time frameTime = _frameTimer.restart();
 	float fps = 1.0 / frameTime.asSeconds();
 
 	float timeMult = 1.0;
@@ -4312,11 +4312,11 @@ void LayerManager::LayerInfo::CalculateDraw(float windowHeight, float windowWidt
 
 	_motionLinkData.push_front(thisFrame);
 
-	sf::Time totalMotionStoredTime;
+	Time totalMotionStoredTime;
 	for (auto& frame : _motionLinkData)
 		totalMotionStoredTime += frame._frameTime;
 
-	while (totalMotionStoredTime > sf::seconds(1.1) && _motionLinkData.size() > 0)
+	while (totalMotionStoredTime > Time::fromSeconds(1.1) && _motionLinkData.size() > 0)
 	{
 		totalMotionStoredTime -= _motionLinkData.back()._frameTime;
 		_motionLinkData.pop_back();

@@ -2,6 +2,7 @@
 
 #include "imgui.h"
 #include "rtmath.h"
+#include "rttime.h"
 #include "TextureManager.h"
 #include <thread>
 #include <vector>
@@ -143,7 +144,7 @@ private:
 
 	bool _playing = false;
 
-	sf::Clock _timer;
+	Clock _timer;
 
 	bool _synced = false;
 
@@ -153,7 +154,7 @@ private:
 	bool _texSmooth = false;
 	TextureManager* _texMan = nullptr;
 	std::string _texPath = "";
-	sf::Clock _loadTimer;
+	Clock _loadTimer;
 	int _loadTimeout = 0;
 	bool _spriteUnloaded = false;
 	bool _spriteLoadFinished = false;
