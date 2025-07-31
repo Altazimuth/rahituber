@@ -24,6 +24,11 @@ public:
 
     T x, y;
 
+	inline Vector2<T> operator -() const
+	{
+		return Vector2<T>(-this->x, -this->y);
+	}
+
 	////////////////////////////////////////////////////////////
 	/// \relates Vector2
 	/// \brief Overload of binary operator -
@@ -128,7 +133,7 @@ public:
 
 	////////////////////////////////////////////////////////////
 	/// \relates Vector2
-	/// \brief Overload of binary operator *
+	/// \brief Overload of binary operator /
 	///
 	/// \param right Right operand (a vector)
 	///
@@ -138,6 +143,11 @@ public:
 	inline Vector2<T> operator /(const Vector2<T>& right) const
 	{
 		return Vector2<T>(this->x / right.x, this->y / right.y);
+	}
+
+	inline Vector2<T> operator /(const T right) const
+	{
+		return Vector2<T>(this->x / right, this->y / right);
 	}
 
 	inline Vector2<double> operator *(const double& right) const
@@ -175,6 +185,12 @@ using Vector2f = Vector2<float>;
 using Vector2i = Vector2<int>;
 using Vector2u = Vector2<unsigned int>;
 
+template<typename T>
+inline Vector2<T> operator *(const T left, const Vector2<T>& right)
+{
+	return Vector2<T>(left * right, right * right.y);
+}
+
 inline bool operator ==(const ImVec4& left, const ImVec4& right)
 {
 	return left.x == right.x && left.y == right.y && left.z == right.z && left.w == right.w;
@@ -211,6 +227,24 @@ inline Vector2<T> Clamp(Vector2<T> in, Vector2<T> min, Vector2<T> max)
 
 	if(in.y > max.y)
 		in.y = max.y;
+
+	return in;
+}
+
+template <typename T>
+inline Vector2<T> Clamp(const Vector2<T> in, const T min, const T max)
+{
+	if(in.x < min)
+		in.x = min;
+
+	if(in.x > max)
+		in.x = max;
+
+	if(in.y < min)
+		in.y = min;
+
+	if(in.y > max)
+		in.y = max;
 
 	return in;
 }
